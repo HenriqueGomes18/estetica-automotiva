@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L' Brothers - Loja Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 1e00%);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #1f2937;
+            margin: auto;
+            padding: 24px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        .success-modal-content {
+            max-width: 500px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="gradient-bg text-white font-sans leading-relaxed min-h-screen">
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="flex flex-col md:flex-row justify-between items-center mb-12">
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="https://as2.ftcdn.net/jpg/01/98/91/55/1000_F_198915596_vZ4UkQO8ppJupDOYrFLKivEJl4XD7ult.jpg" alt="Ícone de carro" class="w-12 h-12">
+                <h1 class="text-3xl font-bold">L'Brothers</h1>
+            </div>
+            <nav class="flex items-center space-x-4">
+                <a href="index.html" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700 hover:shadow-lg">
+                    Página Inicial
+                </a>
+                <a href="loja.html" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700 hover:shadow-lg">
+                    Loja
+                </a>
+                <a href="index.html" class="px-6 py-3 bg-gray-700 text-white font-bold rounded-full transition-all duration-300 hover:bg-gray-800 hover:shadow-lg">
+                    Login
+                </a>
+                <div class="relative cursor-pointer" id="cart-icon">
+                    <i class="fas fa-shopping-cart text-white text-3xl"></i>
+                    <span id="cart-counter" class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full text-xs font-bold w-6 h-6 flex items-center justify-center">0</span>
+                </div>
+            </nav>
+        </header>
+
+        <main class="py-8">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-gray-900 p-8 rounded-xl shadow-xl w-full max-w-6xl">
+                    <h2 class="text-4xl font-bold text-center mb-10 text-purple-400">Catálogo de Produtos</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center text-center transition-transform transform hover:scale-105">
+                            <i class="fas fa-soap text-5xl text-purple-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">Shampoo Automotivo Neutro</h3>
+                            <p class="text-sm text-gray-400 mb-4">Limpeza profunda sem agredir a pintura, ideal para uso frequente.</p>
+                            <p class="text-md font-bold text-purple-300 mb-4">R$ 42,50</p>
+                            <button class="add-to-cart-btn px-6 py-2 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700"
+                                data-product-name="Shampoo Automotivo Neutro Premium" data-product-price="42.50">
+                                Comprar
+                            </button>
+                        </div>
+
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center text-center transition-transform transform hover:scale-105">
+                            <i class="fas fa-spray-can text-5xl text-purple-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">Cera Líquida Rápida</h3>
+                            <p class="text-sm text-gray-400 mb-4">Proteção instantânea e brilho intenso, aplicação em poucos minutos.</p>
+                            <p class="text-md font-bold text-purple-300 mb-4">R$ 57,50</p>
+                            <button class="add-to-cart-btn px-6 py-2 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700"
+                                data-product-name="Cera Líquida Rápida (Spray Shine)" data-product-price="57.50">
+                                Comprar
+                            </button>
+                        </div>
+                        
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center text-center transition-transform transform hover:scale-105">
+                            <i class="fas fa-car-side text-5xl text-purple-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">Kit Aromatizantes Exclusivos</h3>
+                            <p class="text-sm text-gray-400 mb-4">Aromas de luxo para manter o carro sempre agradável.</p>
+                            <p class="text-md font-bold text-purple-300 mb-4">R$ 37,50</p>
+                            <button class="add-to-cart-btn px-6 py-2 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700"
+                                data-product-name="Kit Aromatizantes Exclusivos (3 unid.)" data-product-price="37.50">
+                                Comprar
+                            </button>
+                        </div>
+
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center text-center transition-transform transform hover:scale-105">
+                            <i class="fas fa-hand-sparkles text-5xl text-purple-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">Toalha de Microfibra Premium</h3>
+                            <p class="text-sm text-gray-400 mb-4">Alta absorção e maciez, não risca a pintura.</p>
+                            <p class="text-md font-bold text-purple-300 mb-4">R$ 50,00</p>
+                            <button class="add-to-cart-btn px-6 py-2 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700"
+                                data-product-name="Toalha de Microfibra Premium (Pack c/ 2)" data-product-price="50.00">
+                                Comprar
+                            </button>
+                        </div>
+
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center text-center transition-transform transform hover:scale-105">
+                            <i class="fas fa-broom text-5xl text-purple-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">Limpa Interior Multiuso</h3>
+                            <p class="text-sm text-gray-400 mb-4">Limpeza segura e eficaz para painéis, bancos e partes plásticas.</p>
+                            <p class="class="text-md font-bold text-purple-300 mb-4">R$ 67,50</p>
+                            <button class="add-to-cart-btn px-6 py-2 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700"
+                                data-product-name="Limpa Interior Multiuso (Couro & Plástico)" data-product-price="67.50">
+                                Comprar
+                            </button>
+                        </div>
+
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center text-center transition-transform transform hover:scale-105">
+                            <i class="fas fa-seedling text-5xl text-purple-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">Hidratante de Couro Automotivo</h3>
+                            <p class="text-sm text-gray-400 mb-4">Nutre e protege os bancos de couro, mantendo aparência de novo.</p>
+                            <p class="text-md font-bold text-purple-300 mb-4">R$ 85,00</p>
+                            <button class="add-to-cart-btn px-6 py-2 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700"
+                                data-product-name="Hidratante de Couro Automotivo" data-product-price="85.00">
+                                Comprar
+                            </button>
+                        </div>
+
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center text-center transition-transform transform hover:scale-105">
+                            <i class="fas fa-tools text-5xl text-purple-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">Kit Pós-Polimento</h3>
+                            <p class="text-sm text-gray-400 mb-4">Manutenção prática do brilho após polimento profissional.</p>
+                            <p class="text-md font-bold text-purple-300 mb-4">R$ 102,50</p>
+                            <button class="add-to-cart-btn px-6 py-2 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700"
+                                data-product-name="Kit Pós-Polimento" data-product-price="102.50">
+                                Comprar
+                            </button>
+                        </div>
+
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center text-center transition-transform transform hover:scale-105">
+                            <i class="fas fa-gift text-5xl text-purple-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">Vale-Presente Digital</h3>
+                            <p class="text-sm text-gray-400 mb-4">Presenteie alguém com serviços premium de estética automotiva.</p>
+                            <p class="text-md font-bold text-purple-300 mb-4">R$ 100,00</p>
+                            <button class="add-to-cart-btn px-6 py-2 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700"
+                                data-product-name="Vale-Presente Digital" data-product-price="100.00">
+                                Comprar
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md mx-auto mt-12">
+                        <h3 class="text-2xl font-bold text-purple-400 mb-4">Calcular Frete</h3>
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <input type="text" id="cep-input" placeholder="Digite seu CEP (ddddd-ddd)" class="flex-grow p-3 bg-gray-700 text-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500" maxlength="9">
+                            <button id="calculate-shipping-btn" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-lg transition-all duration-300 hover:bg-purple-700">
+                                Calcular
+                            </button>
+                        </div>
+                        <div id="shipping-result" class="text-center mt-4 text-lg font-semibold">
+                            </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="bg-gray-900 text-gray-400 py-6 mt-12 text-center">
+        <p>&copy; 2025 L' Brothers. Todos os direitos reservados.</p>
+    </footer>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content text-white">
+            <div class="flex justify-between items-center pb-3">
+                <h3 class="text-2xl font-bold">Seu Carrinho</h3>
+                <span class="close-btn text-gray-400 text-3xl font-bold cursor-pointer hover:text-white">&times;</span>
+            </div>
+            <ul id="cart-items" class="border-t border-b border-gray-700 py-4 max-h-72 overflow-y-auto">
+                </ul>
+            
+            <div id="address-section" class="mt-6">
+                <h4 class="text-xl font-semibold mb-4">Endereço de Entrega</h4>
+                <form class="space-y-4">
+                    <div>
+                        <label for="address-cep" class="block text-sm font-medium text-gray-400">CEP</label>
+                        <input type="text" id="address-cep" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="00000-000">
+                    </div>
+                    <div>
+                        <label for="address-street" class="block text-sm font-medium text-gray-400">Rua/Endereço</label>
+                        <input type="text" id="address-street" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Rua de Exemplo">
+                    </div>
+                    <div class="flex space-x-4">
+                        <div class="w-1/2">
+                            <label for="address-number" class="block text-sm font-medium text-gray-400">Número</label>
+                            <input type="text" id="address-number" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="123">
+                        </div>
+                        <div class="w-1/2">
+                            <label for="address-complement" class="block text-sm font-medium text-gray-400">Complemento (Opcional)</label>
+                            <input type="text" id="address-complement" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Apto, Bloco, Casa">
+                        </div>
+                    </div>
+                </form>
+                <button id="confirm-address-btn" class="w-full mt-6 py-3 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700">
+                    Confirmar Endereço
+                </button>
+            </div>
+
+            <div id="payment-section" class="mt-6 hidden">
+                <h4 class="text-xl font-semibold mb-4">Detalhes do Pedido</h4>
+                <div class="space-y-2 text-sm text-gray-400">
+                    <div class="flex justify-between">
+                        <span>Subtotal:</span>
+                        <span id="subtotal-amount">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Frete:</span>
+                        <span id="shipping-amount" class="text-yellow-400">R$ 20,00</span>
+                    </div>
+                    <div class="flex justify-between" id="discount-display" style="display: none;">
+                        <span>Desconto Pix (5%):</span>
+                        <span id="discount-amount" class="text-green-400">R$ 0,00</span>
+                    </div>
+                </div>
+                <div class="text-right font-bold text-xl mt-4 border-t border-gray-700 pt-4">
+                    Total: <span id="cart-total">R$ 0,00</span>
+                </div>
+
+                <h4 class="text-xl font-semibold mt-6 mb-4">Forma de Pagamento</h4>
+                <div class="flex justify-around space-x-4 mb-4">
+                    <button id="credit-card-btn" class="w-1/2 py-3 px-4 bg-gray-700 rounded-lg transition-colors hover:bg-purple-600">
+                        <i class="fas fa-credit-card mr-2"></i> Cartão de Crédito
+                    </button>
+                    <button id="pix-btn" class="w-1/2 py-3 px-4 bg-gray-700 rounded-lg transition-colors hover:bg-purple-600">
+                        <i class="fas fa-qrcode mr-2"></i> Pix
+                    </button>
+                </div>
+
+                <div id="credit-card-form" class="hidden">
+                    <form class="space-y-4">
+                        <div>
+                            <label for="card-number" class="block text-sm font-medium text-gray-400">Número do Cartão</label>
+                            <input type="text" id="card-number" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="0000 0000 0000 0000">
+                        </div>
+                        <div>
+                            <label for="card-name" class="block text-sm font-medium text-gray-400">Nome do Titular</label>
+                            <input type="text" id="card-name" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Nome Impresso no Cartão">
+                        </div>
+                        <div class="flex space-x-4">
+                            <div class="w-1/2">
+                                <label for="card-expiry" class="block text-sm font-medium text-gray-400">Data de Validade</label>
+                                <input type="text" id="card-expiry" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="MM/AA">
+                            </div>
+                            <div class="w-1/2">
+                                <label for="card-cvv" class="block text-sm font-medium text-gray-400">CVV</label>
+                                <input type="text" id="card-cvv" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="123">
+                            </div>
+                        </div>
+                    </form>
+                    <button id="pay-with-card-btn" class="w-full mt-6 py-3 bg-green-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-green-700">
+                        Pagar com Cartão
+                    </button>
+                </div>
+
+                <div id="pix-section" class="hidden text-center">
+                    <img src="https://th.bing.com/th/id/R.dcf4b6e228aef80dd1a58f4c76f07128?rik=Qj2LybacmBALtA&riu=http%3a%2f%2fpngimg.com%2fuploads%2fqr_code%2fqr_code_PNG25.png&ehk=eKH2pdoegouCUxO1rt6BJXt4avVYywmyOS8biIPp5zc%3d&risl=&pid=ImgRaw&r=0" alt="QR Code Pix" class="mx-auto my-4 w-48 h-48">
+                    <p class="text-gray-400 mb-4">Escaneie o QR Code com o aplicativo do seu banco para finalizar a compra.</p>
+                    <button id="pay-with-pix-btn" class="w-full mt-4 py-3 bg-green-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-green-700">
+                        Pagar com Pix
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="success-modal" class="modal">
+        <div class="modal-content success-modal-content text-white">
+            <h3 class="text-2xl font-bold text-green-400 mb-4">Compra Finalizada!</h3>
+            <p class="text-gray-300">Obrigado pela sua compra. O seu pedido foi processado e será enviado em breve.</p>
+            <button id="success-modal-close-btn" class="mt-6 px-8 py-3 bg-purple-600 text-white font-bold rounded-full hover:bg-purple-700">
+                Fechar
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const calculateShippingBtn = document.getElementById('calculate-shipping-btn');
+            const cepInput = document.getElementById('cep-input');
+            const shippingResult = document.getElementById('shipping-result');
+
+            // Lógica de cálculo de frete
+            cepInput.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\D/g, ''); 
+                let formattedValue = '';
+                if (value.length > 5) {
+                    formattedValue = `${value.substring(0, 5)}-${value.substring(5, 8)}`;
+                } else {
+                    formattedValue = value;
+                }
+                e.target.value = formattedValue;
+            });
+            calculateShippingBtn.addEventListener('click', () => {
+                const cep = cepInput.value.replace(/\D/g, '');
+                if (cep.length === 8) {
+                    shippingResult.textContent = "Frete: R$ 20,00";
+                    shippingResult.className = `text-center mt-4 text-lg font-semibold text-green-500`;
+                } else {
+                    shippingResult.textContent = "Por favor, digite um CEP válido.";
+                    shippingResult.classList.remove('text-green-500', 'text-yellow-500');
+                    shippingResult.classList.add('text-red-500');
+                }
+            });
+
+            // Lógica do Carrinho de Compras
+            const cartIcon = document.getElementById('cart-icon');
+            const cartModal = document.getElementById('cart-modal');
+            const closeBtn = cartModal.querySelector('.close-btn');
+            const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
+            const cartItemsList = document.getElementById('cart-items');
+            const subtotalAmountEl = document.getElementById('subtotal-amount');
+            const shippingAmountEl = document.getElementById('shipping-amount');
+            const cartTotalEl = document.getElementById('cart-total');
+            const cartCounter = document.getElementById('cart-counter');
+
+            // Seções do modal
+            const addressSection = document.getElementById('address-section');
+            const confirmAddressBtn = document.getElementById('confirm-address-btn');
+            const paymentSection = document.getElementById('payment-section');
+            const discountDisplay = document.getElementById('discount-display');
+            const discountAmountEl = document.getElementById('discount-amount');
+            
+            // Botões e seções de pagamento
+            const creditCardBtn = document.getElementById('credit-card-btn');
+            const pixBtn = document.getElementById('pix-btn');
+            const creditCardForm = document.getElementById('credit-card-form');
+            const pixSection = document.getElementById('pix-section');
+            const payWithCardBtn = document.getElementById('pay-with-card-btn');
+            const payWithPixBtn = document.getElementById('pay-with-pix-btn');
+            
+            const successModal = document.getElementById('success-modal');
+            const successModalCloseBtn = document.getElementById('success-modal-close-btn');
+
+            const SHIPPING_COST = 20.00;
+            const PIX_DISCOUNT_PERCENTAGE = 0.05;
+            let currentShippingCost = SHIPPING_COST;
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let currentPaymentMethod = ''; // 'credit-card' or 'pix'
+            let checkoutStep = 'address'; // 'address' or 'payment'
+
+            function saveCart() {
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+
+            function updatePaymentView() {
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                let finalTotal = subtotal + currentShippingCost;
+
+                subtotalAmountEl.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+                shippingAmountEl.textContent = `R$ ${currentShippingCost.toFixed(2).replace('.', ',')}`;
+                
+                if (currentPaymentMethod === 'pix' && subtotal > 0) {
+                    const discount = subtotal * PIX_DISCOUNT_PERCENTAGE;
+                    finalTotal = finalTotal - discount;
+                    discountDisplay.style.display = 'flex';
+                    discountAmountEl.textContent = `R$ ${discount.toFixed(2).replace('.', ',')}`;
+                } else {
+                    discountDisplay.style.display = 'none';
+                }
+                
+                cartTotalEl.textContent = `R$ ${finalTotal.toFixed(2).replace('.', ',')}`;
+            }
+
+            function updateModalView() {
+                if (cart.length === 0) {
+                    addressSection.classList.add('hidden');
+                    paymentSection.classList.add('hidden');
+                    cartItemsList.innerHTML = '<li class="text-center text-gray-400 py-4">O carrinho está vazio.</li>';
+                } else {
+                    if (checkoutStep === 'address') {
+                        addressSection.classList.remove('hidden');
+                        paymentSection.classList.add('hidden');
+                    } else if (checkoutStep === 'payment') {
+                        addressSection.classList.add('hidden');
+                        paymentSection.classList.remove('hidden');
+                        updatePaymentView();
+                    }
+                }
+            }
+
+            function renderCart() {
+                cartItemsList.innerHTML = '';
+                let totalItems = 0;
+
+                if (cart.length > 0) {
+                    cart.forEach((item, index) => {
+                        const li = document.createElement('li');
+                        li.className = 'flex justify-between items-center py-2 border-b border-gray-700';
+                        li.innerHTML = `
+                            <div class="flex items-center space-x-4">
+                                <span>${item.name}</span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="remove-btn text-purple-400 hover:text-white" data-index="${index}"><i class="fas fa-minus-circle"></i></button>
+                                    <span class="text-sm text-gray-300">${item.quantity}</span>
+                                    <button class="add-btn text-purple-400 hover:text-white" data-index="${index}"><i class="fas fa-plus-circle"></i></button>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-purple-300">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</span>
+                                <button class="delete-btn text-red-500 hover:text-red-700" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        `;
+                        cartItemsList.appendChild(li);
+                        totalItems += item.quantity;
+                    });
+                }
+                
+                cartCounter.textContent = totalItems;
+                updatePaymentView();
+
+                // Adicionar event listeners aos botões de controle após renderizar
+                document.querySelectorAll('.add-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = e.currentTarget.dataset.index;
+                        cart[index].quantity++;
+                        saveCart();
+                        renderCart();
+                        updatePaymentView();
+                    });
+                });
+
+                document.querySelectorAll('.remove-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = e.currentTarget.dataset.index;
+                        if (cart[index].quantity > 1) {
+                            cart[index].quantity--;
+                        } else {
+                            cart.splice(index, 1);
+                        }
+                        saveCart();
+                        renderCart();
+                        updatePaymentView();
+                        updateModalView(); // Para verificar se o carrinho ficou vazio
+                    });
+                });
+
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = e.currentTarget.dataset.index;
+                        cart.splice(index, 1);
+                        saveCart();
+                        renderCart();
+                        updatePaymentView();
+                        updateModalView(); // Para verificar se o carrinho ficou vazio
+                    });
+                });
+            }
+            
+            // Lógica para simular a finalização da compra
+            function handleCheckout() {
+                cart = []; // Limpa o carrinho
+                saveCart(); // Salva o estado vazio
+                cartModal.style.display = 'none'; // Fecha o modal do carrinho
+                successModal.style.display = 'flex'; // Abre o modal de sucesso
+                checkoutStep = 'address'; // Reseta o passo do checkout
+                renderCart(); // Renderiza o carrinho vazio
+                updateModalView(); // Garante que a próxima abertura do modal comece do zero
+            }
+
+            // Abre o modal do carrinho
+            cartIcon.addEventListener('click', () => {
+                cartModal.style.display = 'flex';
+                renderCart();
+                updateModalView();
+            });
+
+            // Fecha o modal do carrinho
+            closeBtn.addEventListener('click', () => {
+                cartModal.style.display = 'none';
+                creditCardForm.classList.add('hidden');
+                pixSection.classList.add('hidden');
+                creditCardBtn.classList.remove('bg-purple-600');
+                pixBtn.classList.remove('bg-purple-600');
+                checkoutStep = 'address';
+            });
+            
+            // Fecha o modal se clicar fora da área de conteúdo
+            window.addEventListener('click', (event) => {
+                if (event.target === cartModal) {
+                    cartModal.style.display = 'none';
+                    creditCardForm.classList.add('hidden');
+                    pixSection.classList.add('hidden');
+                    creditCardBtn.classList.remove('bg-purple-600');
+                    pixBtn.classList.remove('bg-purple-600');
+                    checkoutStep = 'address';
+                }
+                if (event.target === successModal) {
+                    successModal.style.display = 'none';
+                }
+            });
+
+            // Adiciona um item ao carrinho
+            addToCartBtns.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const productName = event.target.dataset.productName;
+                    const productPrice = parseFloat(event.target.dataset.productPrice);
+                    
+                    const existingItem = cart.find(item => item.name === productName);
+                    if (existingItem) {
+                        existingItem.quantity++;
+                    } else {
+                        cart.push({ name: productName, price: productPrice, quantity: 1 });
+                    }
+
+                    saveCart();
+                    renderCart();
+                });
+            });
+
+            // Lógica do botão de confirmar endereço
+            confirmAddressBtn.addEventListener('click', () => {
+                const cep = document.getElementById('address-cep').value;
+                const street = document.getElementById('address-street').value;
+                const number = document.getElementById('address-number').value;
+
+                if (cep.trim() === '' || street.trim() === '' || number.trim() === '') {
+                    alert('Por favor, preencha todos os campos obrigatórios (CEP, Rua e Número) para continuar.');
+                } else {
+                    checkoutStep = 'payment';
+                    updateModalView();
+                }
+            });
+
+            // Lógica dos botões de pagamento
+            creditCardBtn.addEventListener('click', () => {
+                currentPaymentMethod = 'credit-card';
+                creditCardBtn.classList.add('bg-purple-600');
+                pixBtn.classList.remove('bg-purple-600');
+                creditCardForm.classList.remove('hidden');
+                pixSection.classList.add('hidden');
+                updatePaymentView();
+            });
+
+            pixBtn.addEventListener('click', () => {
+                currentPaymentMethod = 'pix';
+                pixBtn.classList.add('bg-purple-600');
+                creditCardBtn.classList.remove('bg-purple-600');
+                pixSection.classList.remove('hidden');
+                creditCardForm.classList.add('hidden');
+                updatePaymentView();
+            });
+
+            payWithCardBtn.addEventListener('click', (e) => {
+                e.preventDefault(); // Evita o envio do formulário
+                handleCheckout();
+            });
+
+            payWithPixBtn.addEventListener('click', () => {
+                handleCheckout();
+            });
+            
+            // Lógica para fechar o modal de sucesso
+            successModalCloseBtn.addEventListener('click', () => {
+                successModal.style.display = 'none';
+            });
+
+            // Lógica de busca de endereço por CEP na API ViaCEP
+            const addressCepInput = document.getElementById('address-cep');
+            const addressStreetInput = document.getElementById('address-street');
+
+            addressCepInput.addEventListener('input', (e) => {
+                // Formata o CEP como 00000-000
+                let value = e.target.value.replace(/\D/g, ''); 
+                let formattedValue = '';
+                if (value.length > 5) {
+                    formattedValue = `${value.substring(0, 5)}-${value.substring(5, 8)}`;
+                } else {
+                    formattedValue = value;
+                }
+                e.target.value = formattedValue;
+            });
+            
+            addressCepInput.addEventListener('blur', async () => {
+                const cep = addressCepInput.value.replace(/\D/g, '');
+                if (cep.length === 8) {
+                    try {
+                        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                        const data = await response.json();
+
+                        if (!data.erro) {
+                            addressStreetInput.value = data.logradouro;
+                        } else {
+                            addressStreetInput.value = '';
+                            alert('CEP não encontrado. Por favor, digite o endereço manualmente.');
+                        }
+                    } catch (error) {
+                        console.error('Erro ao buscar o CEP:', error);
+                        alert('Ocorreu um erro ao buscar o CEP. Por favor, tente novamente ou digite o endereço manualmente.');
+                    }
+                }
+            });
+
+            // Renderiza o carrinho na carga inicial da página
+            renderCart();
+        });
+    </script>
+</body>
+</html>

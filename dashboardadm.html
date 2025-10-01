@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LBrothers - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+        /* Estilos do Modo Claro (Padrão) */
+        body {
+            background-color: #f8f9fa;
+            color: #212529;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .sidebar {
+            width: 300px;
+            background-color: #55345a;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 15px; /* Reduzido para maior compactação */
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease, background-color 0.3s;
+            /* overflow-y: auto removido para evitar rolagem */
+        }
+        .sidebar .menu-item {
+            color: #ccc;
+            transition: all 0.3s ease;
+            padding: 8px 10px; /* Reduzido para maior compactação */
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            color: #fff;
+            background-color: #6b4c7d;
+        }
+        .sidebar-toggle-btn {
+            background-color: #6b4c7d;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .sidebar-toggle-btn:hover {
+            background-color: #800080;
+        }
+        .header-bar {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .card-custom {
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+        }
+        .text-primary { color: #800080 !important; }
+        .text-success { color: #6b4c7d !important; }
+        .text-warning { color: #55345a !important; }
+        .text-info { color: #9c6cba !important; }
+        .bg-custom-purple-1 { background-color: #800080 !important; }
+        .bg-custom-purple-2 { background-color: #6b4c7d !important; }
+        .bg-custom-purple-3 { background-color: #9c6cba !important; }
+        .bg-custom-purple-4 { background-color: #b89cd8 !important; }
+        .calendar-header .btn { color: #55345a; }
+        .calendar-weekday { font-weight: bold; color: #800080; }
+        .calendar-day .appointment-dot {
+            background-color: #800080;
+        }
+        .action-icons .btn {
+            color: #fff;
+            margin-left: 5px;
+        }
+        .btn-view { background-color: #800080; }
+        .btn-edit { background-color: #6b4c7d; }
+        .btn-delete { background-color: #9c6cba; }
+        .badge-pending { background-color: #ffc107 !important; color: #212529 !important; }
+        .badge-confirmed { background-color: #28a745 !important; }
+        .badge-inprogress { background-color: #0d6efd !important; }
+        .badge-completed { background-color: #6c757d !important; }
+        .badge-canceled { background-color: #dc3545 !important; }
+        .service-info small { color: #6c757d; }
+        .vehicle-info small { color: #6c757d; }
+        .today {
+            background-color: #f0e6f3;
+            border: 2px solid #800080;
+            font-weight: bold;
+        }
+
+        /* REMOVIDO: Estilos do antigo notification-popup (bottom-right) */
+
+        /* NOVO: Estilos do Dropdown de Notificações */
+        .notification-container {
+            position: relative; /* Container necessário para posicionar o dropdown */
+            margin-right: 15px;
+        }
+        #notification-dropdown {
+            position: absolute;
+            top: 55px; /* Posição abaixo do ícone */
+            right: 0;
+            width: 350px;
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none; /* Oculto por padrão */
+            transform: translateX(20px); /* Levemente afastado para melhor visual */
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        #notification-dropdown.active {
+            display: block;
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            text-decoration: none;
+            color: #212529;
+            transition: background-color 0.2s;
+        }
+        .notification-item:hover {
+            background-color: #f1f1f1;
+        }
+        .notification-item.unread {
+            background-color: #f8f0ff; /* Light purple background for unread */
+            font-weight: 500;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        .notification-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .notification-body {
+            flex-grow: 1;
+            font-size: 0.9em;
+            line-height: 1.3;
+        }
+        .notification-time {
+            font-size: 0.75em;
+            color: #999;
+            margin-top: 4px;
+        }
+        .notification-badge {
+            font-size: 0.7rem;
+            padding: 4px 6px;
+        }
+        /* FIM NOVO: Estilos do Dropdown de Notificações */
+
+
+        /* Estilos do Modo Escuro */
+        body.dark-mode {
+            background-color: #212121;
+            color: #e0e0e0;
+        }
+        body.dark-mode .sidebar {
+            background-color: #1a1a1a;
+        }
+        body.dark-mode .sidebar .menu-item {
+            color: #b0b0b0;
+        }
+        body.dark-mode .sidebar .menu-item:hover, body.dark-mode .sidebar .menu-item.active {
+            background-color: #333333;
+        }
+        body.dark-mode .sidebar-toggle-btn {
+            background-color: #333333;
+            color: #fff;
+        }
+        body.dark-mode .sidebar-toggle-btn:hover {
+            background-color: #444444;
+        }
+        body.dark-mode .header-bar {
+            background-color: #2c2c2c;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        body.dark-mode .search-bar .form-control {
+            background-color: #383838;
+            color: #e0e0e0;
+        }
+        body.dark-mode .search-bar .fa-magnifying-glass {
+            color: #ccc;
+        }
+        body.dark-mode .card-custom {
+            background-color: #2c2c2c;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        body.dark-mode .table, body.dark-mode .table td, body.dark-mode .table th {
+            color: #e0e0e0;
+            background-color: transparent;
+            border-color: #444;
+        }
+        body.dark-mode .table-hover tbody tr:hover {
+            background-color: #383838;
+        }
+        body.dark-mode .modal-content {
+            background-color: #2c2c2c;
+            color: #e0e0e0;
+        }
+        body.dark-mode .form-control {
+            background-color: #383838;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        body.dark-mode .form-control:focus {
+            background-color: #383838;
+            border-color: #CC99FF;
+            color: #e0e0e0;
+            box-shadow: 0 0 0 0.25rem rgba(204, 153, 255, 0.25);
+        }
+        body.dark-mode .modal-header {
+            border-bottom: 1px solid #444;
+        }
+        body.dark-mode .modal-footer {
+            border-top: 1px solid #444;
+        }
+
+        /* NOVO: Dark Mode para o Dropdown */
+        body.dark-mode #notification-dropdown {
+            background-color: #2c2c2c;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            color: #e0e0e0;
+        }
+        body.dark-mode .notification-item {
+            color: #e0e0e0;
+            border-bottom: 1px solid #383838;
+        }
+        body.dark-mode .notification-item:hover {
+            background-color: #383838;
+        }
+        body.dark-mode .notification-item.unread {
+            background-color: #333344; /* Darker background for unread */
+        }
+        body.dark-mode .notification-time {
+            color: #b0b0b0;
+        }
+        /* FIM NOVO: Dark Mode para o Dropdown */
+
+        /* Cores do roxo para o modo escuro (textos e ícones em #CC99FF, fundos transparentes) */
+        body.dark-mode .text-primary,
+        body.dark-mode .text-success,
+        body.dark-mode .text-warning,
+        body.dark-mode .text-info,
+        body.dark-mode .calendar-weekday,
+        body.dark-mode .calendar-header h5,
+        body.dark-mode .calendar-header .btn,
+        body.dark-mode .notification-icon,
+        body.dark-mode .user-info-section .fw-bold,
+        body.dark-mode .today-appointment-item .appointment-time,
+        body.dark-mode .service-list-item .icon-container,
+        body.dark-mode .service-list-item .service-name,
+        body.dark-mode h1, body.dark-mode h5 {
+            color: #CC99FF !important; /* Aplica a cor do texto e ícones */
+        }
+        body.dark-mode .card-custom .card-title,
+        body.dark-mode .card-custom .card-body p.fs-4 {
+            color: #e0e0e0 !important; /* Cor mais clara para o título e valor dos cards */
+        }
+        body.dark-mode .card-custom .card-body i {
+            color: #CC99FF !important; /* Ícones dos cards */
+        }
+        body.dark-mode .bg-custom-purple-1,
+        body.dark-mode .bg-custom-purple-2,
+        body.dark-mode .bg-custom-purple-3,
+        body.dark-mode .bg-custom-purple-4,
+        body.dark-mode .calendar-day .appointment-dot {
+            background-color: #CC99FF !important; /* Cor de fundo para barras de progresso e pontos do calendário */
+        }
+        body.dark-mode .calendar-day {
+            color: #b0b0b0; /* Cor dos dias no calendário */
+        }
+        body.dark-mode .today-appointment-item {
+            border-bottom: 1px solid #383838;
+        }
+        body.dark-mode .today-appointment-item .appointment-service,
+        body.dark-mode .text-muted,
+        body.dark-mode .service-info small,
+        body.dark-mode .vehicle-info small,
+        body.dark-mode .client-details small {
+            color: #b0b0b0 !important;
+        }
+        body.dark-mode .card-header.bg-white {
+            background-color: #2c2c2c !important; /* Manter cabeçalhos de cards escuros */
+            border-bottom: 1px solid #383838;
+        }
+        body.dark-mode .btn-view { background-color: #CC99FF; }
+        body.dark-mode .btn-edit { background-color: #6b4c7d; }
+        body.dark-mode .btn-delete { background-color: #dc3545; }
+        body.dark-mode .today {
+            background-color: #383838;
+            border: 2px solid #CC99FF;
+            color: #CC99FF !important;
+        }
+        /* Estilos dos gráficos para se adaptar ao modo escuro */
+        body.dark-mode .chart-container {
+            background-color: #2c2c2c;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .chart-container {
+             background-color: #fff;
+             border-radius: 8px;
+             padding: 15px;
+             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .chart-controls .btn-group { margin-bottom: 20px; }
+
+
+        /* Estilos da barra lateral - COMPACTAÇÃO APLICADA AQUI */
+        .sidebar.collapsed { width: 80px; }
+        .sidebar.collapsed .sidebar-logo,
+        .sidebar.collapsed .button-text { display: none; }
+        .sidebar.collapsed .menu-item { justify-content: center; padding: 8px 0; }
+        .sidebar .sidebar-logo {
+            color: #fff;
+            margin-bottom: 15px; /* Reduzido */
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+        }
+        .sidebar .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* Reduzido */
+            width: 100%;
+            flex-grow: 1; /* Permite que o menu ocupe o espaço restante */
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+        .sidebar .menu-item .button-icon {
+            font-size: 1.5em;
+            width: 30px;
+        }
+        .sidebar .menu-item .button-text {
+            font-size: 1em;
+            font-weight: 500;
+            margin-left: 15px;
+            white-space: nowrap;
+        }
+        .sidebar .menu-logout { 
+            margin-top: auto; /* Garante que o Logout fique no final */
+            margin-bottom: 0; /* Remove margem extra */
+            padding-top: 15px; /* Espaçamento acima do logout */
+        }
+
+        .main-content {
+            margin-left: 300px;
+            padding: 20px;
+            flex-grow: 1;
+            transition: margin-left 0.3s ease;
+        }
+        .main-content.expanded { margin-left: 80px; }
+        .card-custom:hover { transform: translateY(-5px); }
+        .profile-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-left: 12px;
+        }
+        .header-bar {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .search-bar { position: relative; flex-grow: 1; margin-right: 20px; }
+        .search-bar .form-control {
+            border-radius: 50px;
+            padding: 10px 20px 10px 40px;
+            border: none;
+        }
+        .search-bar .fa-magnifying-glass {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        .notification-icon {
+            font-size: 1.5rem;
+            color: #55345a;
+        }
+        .notification-icon:hover { color: #800080; }
+        
+        .user-info-section { display: flex; align-items: center; }
+        .user-info-section .fw-bold { color: #55345a; margin-right: 12px; }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            margin-bottom: 15px;
+            color: #55345a;
+        }
+        .calendar-header h5 { font-weight: bold; }
+        .calendar-header .btn { color: #55345a; }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            gap: 5px;
+        }
+        .calendar-day {
+            padding: 10px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+        .calendar-day:hover { background-color: #f1f1f1; }
+        .today-appointment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .today-appointment-item:last-child { border-bottom: none; }
+        .today-appointment-item .appointment-info { flex-grow: 1; }
+        .today-appointment-item .appointment-time { font-weight: bold; }
+        .today-appointment-item .appointment-service { color: #6c757d; font-size: 0.9rem; }
+        .service-list-item { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .service-list-item .icon-container { font-size: 1.5rem; width: 40px; text-align: center; }
+        .service-list-item .service-name { font-weight: bold; flex-grow: 1; }
+        .service-list-item .service-progress { width: 40%; }
+        .progress {
+            background-color: #e9ecef;
+        }
+        body.dark-mode .progress {
+            background-color: #444444;
+        }
+        .client-info { display: flex; align-items: center; }
+        .client-info .profile-img { margin-right: 10px; margin-left: 0; }
+        .btn-primary {
+            background-color: #800080;
+            border-color: #800080;
+        }
+        .btn-primary:hover {
+            background-color: #6b4c7d;
+            border-color: #6b4c7d;
+        }
+        /* Novo estilo específico para a tabela de clientes/agendamentos */
+        .client-row-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .client-row-info .client-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .client-row-info .client-details .fw-bold {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="d-flex">
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-logo">LBrothers</div>
+        
+        <div class="d-flex justify-content-between mb-2"> 
+            <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" style="width: 48%;">
+                <i class="fas fa-chevron-left"></i>
+                <span class="button-text ms-2">Recolher</span>
+            </button>
+            <button class="sidebar-toggle-btn" id="dark-mode-toggle-btn" style="width: 48%;">
+                <i class="fas fa-sun"></i>
+                <span class="button-text ms-2">Escuro</span>
+            </button>
+        </div>
+
+        <div class="menu-list">
+            <a class="menu-item active" href="#" id="menu-dashboard">
+                <div class="button-icon"><i class="fas fa-home"></i></div>
+                <div class="button-text">Dashboard</div>
+            </a>
+            <a class="menu-item" href="#" id="menu-appointments">
+                <div class="button-icon"><i class="fas fa-calendar-alt"></i></div>
+                <div class="button-text">Agendamentos</div>
+            </a>
+            <a class="menu-item" href="#" id="menu-clients">
+                <div class="button-icon"><i class="fas fa-users"></i></div>
+                <div class="button-text">Clientes</div>
+            </a>
+            <a class="menu-item" href="#" id="menu-services">
+                <div class="button-icon"><i class="fas fa-cogs"></i></div>
+                <div class="button-text">Serviços</div>
+            </a>
+            <a class="menu-item" href="#">
+                <div class="button-icon"><i class="fas fa-user-tie"></i></div>
+                <div class="button-text">Funcionários</div>
+            </a>
+            <a class="menu-item" href="#" id="menu-reports">
+                <div class="button-icon"><i class="fas fa-chart-bar"></i></div>
+                <div class="button-text">Relatórios</div>
+            </a>
+            <a class="menu-item" href="#">
+                <div class="button-icon"><i class="fas fa-cog"></i></div>
+                <div class="button-text">Configurações</div>
+            </a>
+        </div>
+        
+        <a class="menu-item menu-logout" href="index.html" id="menu-logout">
+            <div class="button-icon"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="button-text">Sair</div>
+        </a>
+    </div>
+
+    <div class="main-content" id="main-content">
+        <div class="header-bar">
+            <div class="search-bar">
+                <i class="fas fa-magnifying-glass"></i>
+                <input type="text" class="form-control" placeholder="Pesquisar...">
+            </div>
+            
+            <div class="user-info-section">
+                <div class="notification-container" id="notification-container">
+                    <a href="#" class="notification-icon text-decoration-none" id="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notification-badge" style="display: none;"></span>
+                    </a>
+
+                    <div id="notification-dropdown">
+                        <div class="p-3 border-bottom">
+                            <h6 class="mb-0 fw-bold text-primary">Notificações Recentes</h6>
+                        </div>
+                        <div id="notifications-list" class="list-group list-group-flush">
+                            </div>
+                        <div class="p-2 text-center border-top">
+                            <a href="#" class="btn btn-link btn-sm text-primary" style="font-size: 0.85em;">Ver todos</a>
+                        </div>
+                    </div>
+                    </div>
+                <img src="https://tse1.mm.bing.net/th/id/OIP.-6AG_jNvFeSaHutuhL8SNQHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Foto de Perfil" class="profile-img">
+                <span class="fw-bold">Admin</span>
+            </div>
+        </div>
+        
+        <div id="dashboard-view">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Visão Geral</h1>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newAppointmentModal">
+                    <i class="fas fa-plus me-2"></i>Novo Agendamento
+                </button>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card card-custom p-3">
+                        <div class="card-body text-center">
+                            <i class="fas fa-users text-primary fs-2 mb-2"></i>
+                            <h5 class="card-title">Novos Clientes</h5>
+                            <p class="fs-4 fw-bold text-primary">15</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-custom p-3">
+                        <div class="card-body text-center">
+                            <i class="fas fa-calendar-check text-success fs-2 mb-2"></i>
+                            <h5 class="card-title">Agendamentos</h5>
+                            <p class="fs-4 fw-bold text-success">35</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-custom p-3">
+                        <div class="card-body text-center">
+                            <i class="fas fa-dollar-sign text-warning fs-2 mb-2"></i>
+                            <h5 class="card-title">Vendas (Mês)</h5>
+                            <p class="fs-4 fw-bold text-warning">R$ 5.200</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-custom p-3">
+                        <div class="card-body text-center">
+                            <i class="fas fa-cogs text-info fs-2 mb-2"></i>
+                            <h5 class="card-title">Serviços Ativos</h5>
+                            <p class="fs-4 fw-bold text-info">12</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-header bg-white">
+                            <div class="calendar-header">
+                                <button class="btn btn-link" id="prev-month-btn"><i class="fas fa-chevron-left"></i></button>
+                                <h5 id="current-month-year"></h5>
+                                <button class="btn btn-link" id="next-month-btn"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="calendar-grid" id="calendar-grid">
+                                <div class="calendar-weekday">Dom</div>
+                                <div class="calendar-weekday">Seg</div>
+                                <div class="calendar-weekday">Ter</div>
+                                <div class="calendar-weekday">Qua</div>
+                                <div class="calendar-weekday">Qui</div>
+                                <div class="calendar-weekday">Sex</div>
+                                <div class="calendar-weekday">Sáb</div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Agendamentos de Hoje</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Hora</th>
+                                            <th>Cliente</th>
+                                            <th>Serviço</th>
+                                            <th>Veículo</th>
+                                            <th>Status</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>08:00</td>
+                                            <td>
+                                                <div class="client-info">
+                                                    <img src="https://tse4.mm.bing.net/th/id/OIP.FAUX2xPi4mwsAnbg1xE7MwHaE8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Carlos Silva" class="profile-img">
+                                                    <div>
+                                                        <p class="mb-0 fw-bold">Carlos Silva</p>
+                                                        <small class="text-muted">(11) 98765-4321</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="service-info">
+                                                    <p class="mb-0">Polimento Completo</p>
+                                                    <small class="text-muted">R$ 350,00</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="vehicle-info">
+                                                    <p class="mb-0">Toyota Corolla</p>
+                                                    <small class="text-muted">Preto - ABC1D234</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-completed">Concluído</span>
+                                            </td>
+                                            <td class="action-icons">
+                                                <a href="#" class="btn btn-sm btn-view"><i class="fas fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-edit"><i class="fas fa-edit"></i></a>
+                                                <a href="#" class="btn btn-sm btn-delete"><i class="fas fa-trash-alt"></i></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>10:30</td>
+                                            <td>
+                                                <div class="client-info">
+                                                    <img src="https://f.i.uol.com.br/fotografia/2023/10/24/1698170300653805bcb4214_1698170300_3x4_rt.jpg" alt="Ana Oliveira" class="profile-img">
+                                                    <div>
+                                                        <p class="mb-0 fw-bold">Ana Oliveira</p>
+                                                        <small class="text-muted">(11) 99876-5432</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="service-info">
+                                                    <p class="mb-0">Lavagem Premium</p>
+                                                    <small class="text-muted">R$ 120,00</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="vehicle-info">
+                                                    <p class="mb-0">Honda Civic</p>
+                                                    <small class="text-muted">Prata - XYZ9A876</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-inprogress">Em Andamento</span>
+                                            </td>
+                                            <td class="action-icons">
+                                                <a href="#" class="btn btn-sm btn-view"><i class="fas fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-edit"><i class="fas fa-edit"></i></a>
+                                                <a href="#" class="btn btn-sm btn-delete"><i class="fas fa-trash-alt"></i></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>13:00</td>
+                                            <td>
+                                                <div class="client-info">
+                                                    <img src="https://tse3.mm.bing.net/th/id/OIP.6fHzgSx3elDOxNYNY--6zAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Roberto Santos" class="profile-img">
+                                                    <div>
+                                                        <p class="mb-0 fw-bold">Roberto Santos</p>
+                                                        <small class="text-muted">(11) 98765-1234</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="service-info">
+                                                    <p class="mb-0">Cristalização de Pintura</p>
+                                                    <small class="text-muted">R$ 600,00</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="vehicle-info">
+                                                    <p class="mb-0">BMW X5</p>
+                                                    <small class="text-muted">Branco - DEF5G678</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-confirmed">Confirmado</span>
+                                            </td>
+                                            <td class="action-icons">
+                                                <a href="#" class="btn btn-sm btn-view"><i class="fas fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-edit"><i class="fas fa-edit"></i></a>
+                                                <a href="#" class="btn btn-sm btn-delete"><i class="fas fa-trash-alt"></i></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>15:30</td>
+                                            <td>
+                                                <div class="client-info">
+                                                    <img src="https://cdn.britannica.com/10/251610-050-B5D18C82/Ana-de-Armas-2023.jpg" alt="Juliana Costa" class="profile-img">
+                                                    <div>
+                                                        <p class="mb-0 fw-bold">Juliana Costa</p>
+                                                        <small class="text-muted">(11) 98765-9876</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="service-info">
+                                                    <p class="mb-0">Higienização Interna</p>
+                                                    <small class="text-muted">R$ 250,00</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="vehicle-info">
+                                                    <p class="mb-0">Volkswagen Golf</p>
+                                                    <small class="text-muted">Vermelho - GHI7J890</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-pending">Pendente</span>
+                                            </td>
+                                            <td class="action-icons">
+                                                <a href="#" class="btn btn-sm btn-view"><i class="fas fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-edit"><i class="fas fa-edit"></i></a>
+                                                <a href="#" class="btn btn-sm btn-delete"><i class="fas fa-trash-alt"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Agendamentos Recentes</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Cliente</th>
+                                            <th>Serviço</th>
+                                            <th>Data</th>
+                                            <th>Hora</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="client-info">
+                                                    <img src="https://tse4.mm.bing.net/th/id/OIP.FAUX2xPi4mwsAnbg1xE7MwHaE8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="João Silva" class="profile-img">
+                                                    João Silva
+                                                </div>
+                                            </td>
+                                            <td>Polimento</td>
+                                            <td>20/09/2025</td>
+                                            <td>09:00</td>
+                                            <td><span class="badge bg-success">Confirmado</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="client-info">
+                                                    <img src="https://f.i.uol.com.br/fotografia/2023/10/24/1698170300653805bcb4214_1698170300_3x4_rt.jpg" alt="Maria Santos" class="profile-img">
+                                                    Maria Santos
+                                                </div>
+                                            </td>
+                                            <td>Lavagem Detalhada</td>
+                                            <td>20/09/2025</td>
+                                            <td>11:00</td>
+                                            <td><span class="badge bg-warning text-dark">Pendente</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="client-info">
+                                                    <img src="https://th.bing.com/th/id/R.1d86a70d8e6e8c604b88b6855c9d361e?rik=EU1bde0Y8gBvug&pid=ImgRaw&r=0" alt="Carlos Oliveira" class="profile-img">
+                                                    Carlos Oliveira
+                                                </div>
+                                            </td>
+                                            <td>Cristalização</td>
+                                            <td>21/09/2025</td>
+                                            <td>14:30</td>
+                                            <td><span class="badge bg-success">Confirmado</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Serviços Populares</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="service-list-item">
+                                <div class="icon-container text-primary"><i class="fas fa-car"></i></div>
+                                <span class="service-name">Polimento</span>
+                                <div class="service-progress">
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar bg-custom-purple-1" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <span>85%</span>
+                            </div>
+                            <div class="service-list-item">
+                                <div class="icon-container text-success"><i class="fas fa-spray-can"></i></div>
+                                <span class="service-name">Cristalização</span>
+                                <div class="service-progress">
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar bg-custom-purple-2" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <span>70%</span>
+                            </div>
+                            <div class="service-list-item">
+                                <div class="icon-container text-warning"><i class="fas fa-water-droplet"></i></div>
+                                <span class="service-name">Lavagem Detalhada</span>
+                                <div class="service-progress">
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar bg-custom-purple-3" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <span>60%</span>
+                            </div>
+                            <div class="service-list-item">
+                                <div class="icon-container text-info"><i class="fas fa-wrench"></i></div>
+                                <span class="service-name">Enceramento</span>
+                                <div class="service-progress">
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar bg-custom-purple-4" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <span>45%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="services-view" style="display:none;">
+            </div>
+        <div id="clients-view" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Agenda de Clientes</h1>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Novo Cliente
+                </button>
+            </div>
+            <div class="card card-custom p-0">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%;">Nome e Contato</th>
+                                    <th style="width: 15%;" class="text-center">Serviços Agendados</th>
+                                    <th style="width: 25%;">Último Serviço</th>
+                                    <th style="width: 15%;" class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clients-table-body">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="appointments-view" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Todos os Agendamentos</h1>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newAppointmentModal">
+                    <i class="fas fa-plus me-2"></i>Novo Agendamento
+                </button>
+            </div>
+            <div class="card card-custom p-0">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%;">Cliente</th>
+                                    <th style="width: 25%;">Serviço</th>
+                                    <th style="width: 15%;">Data e Hora</th>
+                                    <th style="width: 15%;">Status</th>
+                                    <th style="width: 20%;" class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appointments-table-body">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="reports-view" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Relatórios de Desempenho</h1>
+                <div class="btn-group chart-controls" role="group">
+                    <button type="button" class="btn btn-primary active" id="btn-appointments-chart">Agendamentos</button>
+                    <button type="button" class="btn btn-primary" id="btn-profit-chart">Lucro Estimado</button>
+                </div>
+            </div>
+            <div class="card card-custom p-4">
+                <h5 class="mb-3" id="chart-title">Agendamentos por Mês (Últimos 6 meses)</h5>
+                <div class="chart-container" style="max-height: 450px;">
+                    <canvas id="main-chart"></canvas>
+                </div>
+            </div>
+        </div>
+        </div>
+</div>
+
+<div class="modal fade" id="newAppointmentModal" tabindex="-1" aria-labelledby="newAppointmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newAppointmentModalLabel">Novo Agendamento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <h6 class="text-muted mb-3">Informações do Cliente</h6>
+                    <div class="mb-3">
+                        <label for="clientName" class="form-label">Nome do Cliente</label>
+                        <input type="text" class="form-control" id="clientName" placeholder="Ex: João da Silva">
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="clientPhone" class="form-label">Telefone</label>
+                            <input type="text" class="form-control" id="clientPhone" placeholder="(00) 00000-0000" maxlength="15">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="clientEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="clientEmail" placeholder="joao@email.com">
+                        </div>
+                    </div>
+                    <h6 class="text-muted mb-3 mt-4">Detalhes do Serviço</h6>
+                    <div class="mb-3">
+                        <label for="serviceType" class="form-label">Serviço</label>
+                        <select class="form-select" id="serviceType">
+                            <option value="">Selecione um serviço</option>
+                            <option value="Polimento cristalizado">Polimento cristalizado</option>
+                            <option value="Lavagem Premium">Lavagem Premium</option>
+                            <option value="Higienização Interna">Higienização Interna</option>
+                            <option value="Cristalização de Pintura">Cristalização de Pintura</option>
+                        </select>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="appointmentDate" class="form-label">Data</label>
+                            <input type="date" class="form-control" id="appointmentDate">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="appointmentTime" class="form-label">Hora</label>
+                            <input type="time" class="form-control" id="appointmentTime">
+                        </div>
+                    </div>
+                    <h6 class="text-muted mb-3 mt-4">Detalhes do Veículo</h6>
+                    <div class="mb-3">
+                        <label for="vehicleModel" class="form-label">Modelo do Veículo</label>
+                        <input type="text" class="form-control" id="vehicleModel" placeholder="Ex: Honda Civic">
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="vehicleColor" class="form-label">Cor</label>
+                            <input type="text" class="form-control" id="vehicleColor" placeholder="Ex: Preto">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="vehiclePlate" class="form-label">Placa</label>
+                            <input type="text" class="form-control" id="vehiclePlate" placeholder="Ex: ABC1234" maxlength="7">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary">Salvar Agendamento</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // --- DUMMY DATA AND UTILITY FUNCTIONS FOR CLIENTS/APPOINTMENTS VIEWS ---
+    const placeholderImages = [
+        "https://randomuser.me/api/portraits/men/1.jpg", "https://randomuser.me/api/portraits/women/2.jpg", "https://randomuser.me/api/portraits/men/3.jpg", "https://randomuser.me/api/portraits/women/4.jpg", "https://randomuser.me/api/portraits/men/5.jpg", "https://randomuser.me/api/portraits/women/6.jpg", "https://randomuser.me/api/portraits/men/7.jpg", "https://randomuser.me/api/portraits/women/8.jpg", "https://randomuser.me/api/portraits/men/9.jpg", "https://randomuser.me/api/portraits/women/10.jpg",
+        "https://randomuser.me/api/portraits/men/11.jpg", "https://randomuser.me/api/portraits/women/12.jpg", "https://randomuser.me/api/portraits/men/13.jpg", "https://randomuser.me/api/portraits/women/14.jpg", "https://randomuser.me/api/portraits/men/15.jpg", "https://randomuser.me/api/portraits/women/16.jpg", "https://randomuser.me/api/portraits/men/17.jpg", "https://randomuser.me/api/portraits/women/18.jpg", "https://randomuser.me/api/portraits/men/19.jpg", "https://randomuser.me/api/portraits/women/20.jpg",
+        "https://randomuser.me/api/portraits/men/21.jpg", "https://randomuser.me/api/portraits/women/22.jpg", "https://randomuser.me/api/portraits/men/23.jpg", "https://randomuser.me/api/portraits/women/24.jpg"
+    ]; // Extended list of placeholder images
+
+    const firstNames = ["Miguel", "Sophia", "Arthur", "Alice", "Heitor", "Manuela", "Bernardo", "Laura", "Davi", "Valentina", "Lorenzo", "Júlia", "Pedro", "Heloísa", "Gabriel", "Maria", "Enzo", "Luiza", "Lucas", "Lívia", "Rafael", "Rebeca", "Bruno", "Bianca"];
+    const lastNames = ["Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Ferreira", "Alves", "Pereira", "Lima", "Gomes"];
+    const services = ["Polimento Completo", "Cristalização de Pintura", "Lavagem Premium", "Higienização Interna", "Oxi-Sanitização", "Proteção de Pintura", "Vitrificação de Pintura", "Remoção de Chuva Ácida"];
+    const statusList = [{name: "Confirmado", class: "bg-success"}, {name: "Pendente", class: "bg-warning text-dark"}, {name: "Concluído", class: "badge-completed"}, {name: "Cancelado", class: "bg-danger"}, {name: "Em Andamento", class: "badge-inprogress"}];
+
+    function getRandomItem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateRandomPhone() {
+        return `(11) 9${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}`;
+    }
+
+    function generateRandomEmail(name, id) {
+        const cleanName = name.toLowerCase().replace(/ /g, '.').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return `${cleanName}${id}@ficticio.com.br`;
+    }
+
+    function generateRandomDate() {
+        const day = Math.floor(1 + Math.random() * 28);
+        const month = Math.floor(9 + Math.random() * 4); // Sept to Dec 2025 (Fictional Dates)
+        return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/2025`;
+    }
+
+    function generateRandomTime() {
+        const hour = Math.floor(8 + Math.random() * 10);
+        const minute = Math.random() < 0.5 ? '00' : '30';
+        return `${hour.toString().padStart(2, '0')}:${minute}`;
+    }
+
+    // Generate Clients Data (20 significant entries)
+    const allClients = Array.from({ length: 20 }, (_, i) => {
+        const firstName = getRandomItem(firstNames);
+        const lastName = getRandomItem(lastNames);
+        const name = `${firstName} ${lastName}`;
+        return {
+            id: i + 1,
+            name: name,
+            image: placeholderImages[i], // Use placeholder image
+            phone: generateRandomPhone(), // Fictitious phone
+            email: generateRandomEmail(name, i+1), // Fictitious email
+            totalAppointments: Math.floor(1 + Math.random() * 25),
+            lastService: getRandomItem(services),
+            lastServiceDate: generateRandomDate()
+        };
+    });
+
+    // Generate Appointments Data (20 significant entries)
+    const allAppointments = Array.from({ length: 20 }, (_, i) => {
+        const client = getRandomItem(allClients); // Link appointment to a dummy client
+        const appointmentStatus = getRandomItem(statusList);
+        const appointmentService = getRandomItem(services);
+
+        return {
+            id: i + 1,
+            clientName: client.name,
+            clientImage: client.image,
+            service: appointmentService,
+            date: generateRandomDate(),
+            time: generateRandomTime(),
+            statusName: appointmentStatus.name,
+            statusClass: appointmentStatus.class
+        };
+    });
+
+    // --- POPULATE TABLE FUNCTIONS ---
+
+    function populateClientsTable(clients) {
+        const tableBody = document.getElementById('clients-table-body');
+        if (!tableBody) return;
+        tableBody.innerHTML = ''; // Clear existing data
+
+        clients.forEach(client => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <div class="client-row-info">
+                        <img src="${client.image}" alt="${client.name}" class="profile-img">
+                        <div class="client-details">
+                            <p class="mb-0 fw-bold">${client.name}</p>
+                            <small class="text-muted"><i class="fas fa-phone me-1"></i>${client.phone}</small>
+                            <small class="text-muted"><i class="fas fa-envelope me-1"></i>${client.email}</small>
+                        </div>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <span class="fs-4 fw-bold text-primary">${client.totalAppointments}</span>
+                </td>
+                <td>
+                    <p class="mb-0">${client.lastService}</p>
+                    <small class="text-muted">${client.lastServiceDate}</small>
+                </td>
+                <td class="action-icons text-center">
+                    <a href="#" class="btn btn-sm btn-view" title="Ver Histórico"><i class="fas fa-eye"></i></a>
+                    <a href="#" class="btn btn-sm btn-edit" title="Editar Cliente"><i class="fas fa-edit"></i></a>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function populateAppointmentsTable(appointments) {
+        const tableBody = document.getElementById('appointments-table-body');
+        if (!tableBody) return;
+        tableBody.innerHTML = ''; // Clear existing data
+
+        appointments.forEach(app => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <div class="client-info">
+                        <img src="${app.clientImage}" alt="${app.clientName}" class="profile-img">
+                        <div>
+                            <p class="mb-0 fw-bold">${app.clientName}</p>
+                            <small class="text-muted">ID: ${app.id}</small>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <p class="mb-0">${app.service}</p>
+                    <small class="text-muted">R$ ${Math.floor(100 + Math.random() * 900)}</small>
+                </td>
+                <td>
+                    <p class="mb-0 fw-bold">${app.date}</p>
+                    <small class="text-muted">${app.time}</small>
+                </td>
+                <td>
+                    <span class="badge ${app.statusClass}">${app.statusName}</span>
+                </td>
+                <td class="action-icons text-center">
+                    <a href="#" class="btn btn-sm btn-view" title="Ver Detalhes"><i class="fas fa-eye"></i></a>
+                    <a href="#" class="btn btn-sm btn-edit" title="Editar Status"><i class="fas fa-edit"></i></a>
+                    <a href="#" class="btn btn-sm btn-delete" title="Cancelar Agendamento"><i class="fas fa-trash-alt"></i></a>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // --- EXISTING LOGIC RE-IMPLEMENTED ---
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
+        const darkModeToggleBtn = document.getElementById('dark-mode-toggle-btn');
+        const notificationIcon = document.getElementById('notification-icon');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+
+        // Notification Dummy Data & Logic
+        const notificationsData = [
+            { id: 1, title: "Novo Agendamento Confirmado", time: "5 min atrás", icon: "fas fa-check-circle", isUnread: true, link: "#" },
+            { id: 2, title: "Cliente João Silva cadastrado", time: "1 hora atrás", icon: "fas fa-user-plus", isUnread: true, link: "#" },
+            { id: 3, title: "Pagamento recebido de R$550", time: "3 horas atrás", icon: "fas fa-dollar-sign", isUnread: false, link: "#" },
+            { id: 4, title: "Lembrete: Agendamento das 14h", time: "Ontem", icon: "fas fa-bell", isUnread: false, link: "#" },
+        ];
+        
+        function populateNotifications() {
+            const list = document.getElementById('notifications-list');
+            if (!list) return;
+            list.innerHTML = '';
+            let unreadCount = 0;
+
+            notificationsData.forEach(item => {
+                if (item.isUnread) unreadCount++;
+                const itemClass = item.isUnread ? 'unread' : '';
+                const itemHtml = `
+                    <a href="${item.link}" class="notification-item ${itemClass}">
+                        <div class="notification-avatar bg-primary d-flex align-items-center justify-content-center text-white">
+                             <i class="${item.icon}"></i>
+                        </div>
+                        <div class="notification-body">
+                            <p class="mb-0">${item.title}</p>
+                            <small class="notification-time">${item.time}</small>
+                        </div>
+                    </a>
+                `;
+                list.insertAdjacentHTML('beforeend', itemHtml);
+            });
+
+            // Update badge
+            const badge = document.getElementById('notification-badge');
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+        populateNotifications(); // Initial load
+
+        // Notification Dropdown Toggle
+        notificationIcon.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent document click from immediately closing
+            notificationDropdown.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!notificationDropdown.contains(e.target) && !notificationIcon.contains(e.target)) {
+                notificationDropdown.classList.remove('active');
+            }
+        });
+
+
+        // Calendar Logic
+        const calendarGrid = document.getElementById('calendar-grid');
+        const currentMonthYear = document.getElementById('current-month-year');
+        const prevMonthBtn = document.getElementById('prev-month-btn');
+        const nextMonthBtn = document.getElementById('next-month-btn');
+        let currentDate = new Date();
+
+        // Sample data for appointments marked on the calendar
+        const appointmentsOnDays = [
+            { day: 5, count: 2 },
+            { day: 10, count: 1 },
+            { day: 15, count: 3 },
+            { day: 22, count: 1 },
+            { day: 25, count: 2 },
+        ];
+
+        function renderCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const today = new Date();
+
+            currentMonthYear.textContent = date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }).replace(/\b\w/g, l => l.toUpperCase());
+            
+            calendarGrid.innerHTML = `
+                <div class="calendar-weekday">Dom</div>
+                <div class="calendar-weekday">Seg</div>
+                <div class="calendar-weekday">Ter</div>
+                <div class="calendar-weekday">Qua</div>
+                <div class="calendar-weekday">Qui</div>
+                <div class="calendar-weekday">Sex</div>
+                <div class="calendar-weekday">Sáb</div>
+            `;
+
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Fill leading empty days
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                calendarGrid.insertAdjacentHTML('beforeend', `<div class="calendar-day text-muted"></div>`);
+            }
+
+            // Fill days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                const todayClass = isToday ? 'today' : '';
+                const appointmentData = appointmentsOnDays.find(a => a.day === day);
+                const dotHtml = appointmentData ? `<div class="appointment-dot rounded-circle position-absolute bottom-0 end-0 me-1 mb-1" style="width: 8px; height: 8px;"></div>` : '';
+                
+                const dayHtml = `
+                    <div class="calendar-day ${todayClass}">
+                        ${day}
+                        ${dotHtml}
+                    </div>
+                `;
+                calendarGrid.insertAdjacentHTML('beforeend', dayHtml);
+            }
+        }
+
+        prevMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+
+        renderCalendar(currentDate);
+
+        // Chart Logic (Reports View)
+        let myChart = null;
+
+        const appointmentsChartData = {
+            labels: ['Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro'],
+            datasets: [{
+                label: 'Agendamentos',
+                data: [12, 19, 3, 5, 10, 20],
+                backgroundColor: [
+                    '#800080', // Roxo principal
+                    '#6b4c7d',
+                    '#9c6cba',
+                    '#b89cd8',
+                    '#cc99ff',
+                    '#55345a'
+                ],
+                borderColor: 'transparent',
+                borderWidth: 1
+            }]
+        };
+
+        const profitChartData = {
+            labels: ['Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro'],
+            datasets: [{
+                label: 'Lucro Estimado (R$)',
+                data: [3500, 5200, 1500, 4800, 7000, 6500],
+                backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                borderColor: '#007bff',
+                borderWidth: 2,
+                type: 'line', // Define como gráfico de linha
+                fill: true
+            }]
+        };
+        
+        const chartTitle = document.getElementById('chart-title');
+        const btnAppointmentsChart = document.getElementById('btn-appointments-chart');
+        const btnProfitChart = document.getElementById('btn-profit-chart');
+
+        function initializeChart(type = 'appointments') {
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            const ctx = document.getElementById('main-chart').getContext('2d');
+            let data, titleText, chartType;
+
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const gridColor = isDarkMode ? 'rgba(68, 68, 68, 1)' : 'rgba(0, 0, 0, 0.1)';
+            const textColor = isDarkMode ? '#CC99FF' : '#212529';
+            
+            if (type === 'appointments') {
+                data = appointmentsChartData;
+                titleText = 'Agendamentos por Mês (Últimos 6 meses)';
+                chartType = 'bar';
+                btnAppointmentsChart.classList.add('active');
+                btnProfitChart.classList.remove('active');
+            } else {
+                data = profitChartData;
+                titleText = 'Lucro Estimado por Mês (Últimos 6 meses)';
+                chartType = 'line';
+                btnAppointmentsChart.classList.remove('active');
+                btnProfitChart.classList.add('active');
+            }
+            
+            chartTitle.textContent = titleText;
+
+            myChart = new Chart(ctx, {
+                type: chartType,
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: gridColor,
+                            },
+                            ticks: {
+                                color: textColor
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: gridColor,
+                            },
+                            ticks: {
+                                color: textColor
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: textColor // Cor da legenda no modo escuro
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        btnAppointmentsChart.addEventListener('click', () => initializeChart('appointments'));
+        btnProfitChart.addEventListener('click', () => initializeChart('profit'));
+        
+
+        // View Switcher Logic
+        const menuItems = document.querySelectorAll('.menu-item');
+        const views = ['dashboard-view', 'appointments-view', 'clients-view', 'services-view', 'reports-view'];
+
+        function showView(viewId) {
+            views.forEach(id => {
+                const viewElement = document.getElementById(id);
+                if (viewElement) {
+                    viewElement.style.display = 'none';
+                }
+            });
+            const activeView = document.getElementById(viewId);
+            if (activeView) {
+                activeView.style.display = 'block';
+            }
+
+            // Special logic for active menu item
+            menuItems.forEach(item => item.classList.remove('active'));
+            const activeMenuItem = document.getElementById('menu-' + viewId.replace('-view', ''));
+            if (activeMenuItem) {
+                activeMenuItem.classList.add('active');
+            }
+        }
+
+        // Initial view load
+        showView('dashboard-view');
+        // Initial chart load
+        initializeChart('appointments');
+
+        // Menu item click listeners
+        document.getElementById('menu-dashboard').addEventListener('click', (e) => { e.preventDefault(); showView('dashboard-view'); });
+        
+        // MODIFIED TO POPULATE WITH DUMMY DATA
+        document.getElementById('menu-appointments').addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            showView('appointments-view'); 
+            populateAppointmentsTable(allAppointments);
+        });
+
+        // MODIFIED TO POPULATE WITH DUMMY DATA
+        document.getElementById('menu-clients').addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            showView('clients-view'); 
+            populateClientsTable(allClients); 
+        });
+        
+        // Placeholder for services view - keeping existing logic
+        document.getElementById('menu-services').addEventListener('click', (e) => { e.preventDefault(); showView('services-view'); /* populateServicesList(); */ });
+        document.getElementById('menu-reports').addEventListener('click', (e) => { e.preventDefault(); showView('reports-view'); initializeChart('appointments'); });
+        
+
+
+        // Dark mode toggle
+        darkModeToggleBtn.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const toggleBtnIcon = this.querySelector('.fas');
+            const buttonText = this.querySelector('.button-text');
+
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const gridColor = isDarkMode ? 'rgba(68, 68, 68, 1)' : 'rgba(0, 0, 0, 0.1)';
+            const textColor = isDarkMode ? '#CC99FF' : '#212529';
+
+            if (isDarkMode) {
+                toggleBtnIcon.classList.remove('fa-sun');
+                toggleBtnIcon.classList.add('fa-moon');
+                buttonText.textContent = 'Claro';
+                
+                // Atualiza a cor dos textos e linhas do gráfico para o modo escuro
+                if (myChart) {
+                    myChart.options.scales.x.ticks.color = textColor;
+                    myChart.options.scales.y.ticks.color = textColor;
+                    myChart.options.scales.x.grid.color = gridColor;
+                    myChart.options.scales.y.grid.color = gridColor;
+                    myChart.options.plugins.legend.labels.color = textColor;
+                    myChart.update();
+                }
+
+            } else {
+                toggleBtnIcon.classList.remove('fa-moon');
+                toggleBtnIcon.classList.add('fa-sun');
+                buttonText.textContent = 'Escuro';
+                
+                // Retorna a cor dos textos e linhas do gráfico para o modo claro
+                if (myChart) {
+                    myChart.options.scales.x.ticks.color = textColor;
+                    myChart.options.scales.y.ticks.color = textColor;
+                    myChart.options.scales.x.grid.color = gridColor;
+                    myChart.options.scales.y.grid.color = gridColor;
+                    myChart.options.plugins.legend.labels.color = textColor;
+                    myChart.update();
+                }
+            }
+        });
+
+        // Sidebar collapse toggle
+        sidebarToggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+            const toggleBtnIcon = this.querySelector('.fas');
+            if (sidebar.classList.contains('collapsed')) {
+                toggleBtnIcon.classList.remove('fa-chevron-left');
+                toggleBtnIcon.classList.add('fa-chevron-right');
+            } else {
+                toggleBtnIcon.classList.remove('fa-chevron-right');
+                toggleBtnIcon.classList.add('fa-chevron-left');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

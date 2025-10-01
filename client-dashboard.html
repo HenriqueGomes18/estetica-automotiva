@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L' Brothers - Dashboard do Cliente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #1f2937;
+            margin: auto;
+            padding: 24px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .close-btn {
+            color: #9ca3af;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-btn:hover,
+        .close-btn:focus {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal.flex {
+            display: flex;
+        }
+        .floating-label {
+            position: absolute;
+            pointer-events: none;
+            left: 12px;
+            top: 12px;
+            transition: 0.2s ease all;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+        input:focus ~ .floating-label,
+        input:not(:placeholder-shown) ~ .floating-label {
+            top: -8px;
+            left: 10px;
+            font-size: 12px;
+            background: #2d3748;
+            padding: 0 5px;
+            color: #fff;
+        }
+        select:focus ~ .floating-label,
+        select:not([value=""]) ~ .floating-label {
+            top: -8px;
+            left: 10px;
+            font-size: 12px;
+            background: #2d3748;
+            padding: 0 5px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="gradient-bg text-white font-sans leading-relaxed min-h-screen">
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="flex flex-col md:flex-row justify-between items-center mb-12">
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="https://as2.ftcdn.net/jpg/01/98/91/55/1000_F_198915596_vZ4UkQO8ppJupDOYrFLKivEJl4XD7ult.jpg" alt="Ícone de carro" class="w-12 h-12">
+                <h1 class="text-3xl font-bold">L'Brothers</h1>
+            </div>
+            <nav class="flex items-center space-x-4">
+                <p id="welcome-message" class="text-white text-lg font-semibold">Painel do Cliente</p>
+                <a href="index.html" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700 hover:shadow-lg">
+                    Página Inicial
+                </a>
+            </nav>
+        </header>
+
+        <main class="py-8">
+            <div class="flex flex-col items-center">
+                <div class="bg-gray-900 p-8 rounded-xl shadow-xl w-full max-w-4xl">
+                    <h2 class="text-3xl font-bold text-center mb-6 text-purple-400">Seus Agendamentos</h2>
+                    
+                    <div id="dashboard-container" class="flex flex-col items-center space-y-4">
+                        </div>
+
+                    <div class="text-center mt-8">
+                        <button id="new-appointment-btn" class="px-8 py-4 bg-purple-600 text-white font-bold text-lg rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-purple-700">
+                            Novo Agendamento
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="bg-gray-900 text-gray-400 py-6 mt-12 text-center">
+        <p>&copy; 2025 L' Brothers. Todos os direitos reservados.</p>
+    </footer>
+
+    <div id="appointment-modal" class="modal">
+        <div class="modal-content max-w-md">
+            <span id="close-appointment-modal" class="close-btn">&times;</span>
+            <h3 class="text-2xl font-bold text-center mb-6">Novo Agendamento</h3>
+            <form id="appointment-form">
+                <div class="relative mb-6">
+                    <select id="service-select" name="service" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-400" required>
+                        <option value="" disabled selected>Escolha um Serviço</option>
+                        <option value="Lavagem Premium">Lavagem Premium</option>
+                        <option value="Polimento Cristalizado">Polimento Cristalizado</option>
+                        <option value="Detalhamento Interno">Detalhamento Interno</option>
+                        <option value="Proteção de Pintura">Proteção de Pintura</option>
+                        <option value="Higienização de Ar Condicionado">Higienização de Ar Condicionado</option>
+                        <option value="Hidratação de Couro">Hidratação de Couro</option>
+                    </select>
+                    <label for="service-select" class="floating-label">Serviço</label>
+                </div>
+                <div class="relative mb-6">
+                    <input type="text" id="car-model-input" name="carModel" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-transparent" placeholder="Modelo do Carro" required>
+                    <label for="car-model-input" class="floating-label">Modelo do Carro</label>
+                </div>
+                <div class="relative mb-6">
+                    <input type="date" id="date-input" name="date" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-transparent" placeholder="Data" required>
+                    <label for="date-input" class="floating-label">Data</label>
+                </div>
+                <div class="relative mb-6">
+                    <select id="time-select" name="time" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-400" required>
+                        <option value="" disabled selected>Escolha uma Hora</option>
+                    </select>
+                    <label for="time-select" class="floating-label">Hora</label>
+                </div>
+                <button type="submit" class="w-full px-4 py-3 bg-purple-600 text-white font-bold rounded-lg transition-all duration-300 hover:bg-purple-700">Agendar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="success-modal" class="modal">
+        <div class="modal-content max-w-sm text-center">
+            <span id="close-success-modal" class="close-btn">&times;</span>
+            <div class="mb-4">
+                <i class="fas fa-check-circle text-5xl text-green-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Agendamento Concluído!</h3>
+            <p class="text-gray-400">Seu agendamento foi realizado com sucesso.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dashboardContainer = document.getElementById('dashboard-container');
+            const newAppointmentBtn = document.getElementById('new-appointment-btn');
+            const appointmentModal = document.getElementById('appointment-modal');
+            const closeAppointmentModalBtn = document.getElementById('close-appointment-modal');
+            const appointmentForm = document.getElementById('appointment-form');
+            const successModal = document.getElementById('success-modal');
+            const closeSuccessModalBtn = document.getElementById('close-success-modal');
+            const timeSelect = document.getElementById('time-select');
+
+            // Array para armazenar os agendamentos (simulado)
+            let appointments = [];
+
+            // Função para gerar as opções de horário
+            const generateTimeOptions = () => {
+                const startHour = 8;
+                const endHour = 17;
+                for (let hour = startHour; hour <= endHour; hour++) {
+                    const time = `${hour.toString().padStart(2, '0')}:00`;
+                    const option = document.createElement('option');
+                    option.value = time;
+                    option.textContent = time;
+                    timeSelect.appendChild(option);
+                }
+            };
+
+            // Função para renderizar os agendamentos
+            const renderAppointments = (currentAppointments) => {
+                dashboardContainer.innerHTML = '';
+                if (currentAppointments && currentAppointments.length > 0) {
+                    const appointmentHtml = currentAppointments.map((app, index) => `
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-full flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                            <div class="flex-grow">
+                                <h3 class="text-xl font-semibold text-purple-400 mb-2">${app.service}</h3>
+                                <p class="text-sm text-gray-400">Modelo do Carro: ${app.carModel}</p>
+                                <p class="text-sm text-gray-400">Data: ${app.date}</p>
+                                <p class="text-sm text-gray-400">Hora: ${app.time}</p>
+                                <p class="text-sm font-bold mt-2 ${app.status === 'Confirmado' ? 'text-green-500' : 'text-yellow-500'}">
+                                    Status: ${app.status}
+                                </p>
+                            </div>
+                            <button class="cancel-btn px-6 py-2 bg-red-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-red-700" data-index="${index}">
+                                Cancelar
+                            </button>
+                        </div>
+                    `).join('');
+                    dashboardContainer.innerHTML = appointmentHtml;
+                    setupCancelButtons();
+                } else {
+                    const noAppointmentMessageHtml = `
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg text-center w-full mb-6">
+                            <div class="text-center mb-6">
+                                <img src="https://th.bing.com/th/id/R.86d33adb05b3b385486f4709b783bdad?rik=Yr2x0gmkkuSF1w&pid=ImgRaw&r=0" alt="Ícone de calendário" class="w-16 h-16 mx-auto mb-4 opacity-70">
+                                <p class="text-xl font-semibold text-gray-400">Nenhum agendamento encontrado.</p>
+                                <p class="text-gray-500 mt-2">Parece que você ainda não agendou nenhum serviço.</p>
+                            </div>
+                        </div>
+                    `;
+                    dashboardContainer.innerHTML = noAppointmentMessageHtml;
+                }
+            };
+            
+            // Função para configurar os event listeners dos botões de cancelar
+            const setupCancelButtons = () => {
+                const cancelBtns = document.querySelectorAll('.cancel-btn');
+                cancelBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = e.target.getAttribute('data-index');
+                        if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
+                            deleteAppointment(index);
+                        }
+                    });
+                });
+            };
+
+            // Função para deletar o agendamento
+            const deleteAppointment = (index) => {
+                appointments.splice(index, 1);
+                renderAppointments(appointments);
+            };
+
+            // Event listener para o botão "Novo Agendamento"
+            newAppointmentBtn.addEventListener('click', () => {
+                appointmentModal.classList.add('flex');
+            });
+
+            // Event listener para fechar o modal de agendamento
+            closeAppointmentModalBtn.addEventListener('click', () => {
+                appointmentModal.classList.remove('flex');
+                appointmentForm.reset();
+            });
+
+            // Event listener para fechar o modal de sucesso
+            closeSuccessModalBtn.addEventListener('click', () => {
+                successModal.classList.remove('flex');
+            });
+
+            // Event listener para o envio do formulário de agendamento
+            appointmentForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const service = document.getElementById('service-select').value;
+                const carModel = document.getElementById('car-model-input').value;
+                const date = document.getElementById('date-input').value;
+                const time = document.getElementById('time-select').value;
+
+                // Cria um novo agendamento
+                const newAppointment = {
+                    service: service,
+                    carModel: carModel,
+                    date: date,
+                    time: time,
+                    status: 'Pendente' // Novo agendamento começa como pendente
+                };
+
+                // Adiciona o novo agendamento ao array
+                appointments.push(newAppointment);
+
+                // Re-renderiza a lista de agendamentos
+                renderAppointments(appointments);
+
+                // Fecha o modal de agendamento
+                appointmentModal.classList.remove('flex');
+                appointmentForm.reset();
+
+                // Exibe o modal de sucesso
+                successModal.classList.add('flex');
+            });
+
+            // Fecha modais clicando fora deles
+            window.addEventListener('click', (event) => {
+                if (event.target === appointmentModal) {
+                    appointmentModal.classList.remove('flex');
+                    appointmentForm.reset();
+                }
+                if (event.target === successModal) {
+                    successModal.classList.remove('flex');
+                }
+            });
+
+            // Gera as opções de horário ao carregar a página
+            generateTimeOptions();
+
+            // Renderiza os agendamentos iniciais
+            renderAppointments(appointments);
+        });
+    </script>
+</body>
+</html>
