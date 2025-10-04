@@ -166,6 +166,16 @@
         }
         /* FIM NOVO: Estilos do Dropdown de Notificações */
 
+        /* Estilos adicionados para os novos botões do header */
+        .header-action-btn {
+            font-size: 1.5rem;
+            color: #55345a;
+            margin-left: 15px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .header-action-btn:hover { color: #800080; }
+
 
         /* Estilos do Modo Escuro */
         body.dark-mode {
@@ -233,7 +243,7 @@
             border-top: 1px solid #444;
         }
 
-        /* NOVO: Dark Mode para o Dropdown */
+        /* NOVO: Dark Mode para o Dropdown e Botões de Ação do Header */
         body.dark-mode #notification-dropdown {
             background-color: #2c2c2c;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
@@ -252,7 +262,15 @@
         body.dark-mode .notification-time {
             color: #b0b0b0;
         }
-        /* FIM NOVO: Dark Mode para o Dropdown */
+        body.dark-mode .notification-icon,
+        body.dark-mode .header-action-btn {
+            color: #CC99FF !important; /* Cor dos ícones no modo escuro */
+        }
+        body.dark-mode .notification-icon:hover,
+        body.dark-mode .header-action-btn:hover {
+            color: #e0e0e0 !important;
+        }
+        /* FIM NOVO: Dark Mode para o Dropdown e Botões de Ação do Header */
 
         /* Cores do roxo para o modo escuro (textos e ícones em #CC99FF, fundos transparentes) */
         body.dark-mode .text-primary,
@@ -310,17 +328,16 @@
             color: #CC99FF !important;
         }
         /* Estilos dos gráficos para se adaptar ao modo escuro */
-        body.dark-mode .chart-container {
-            background-color: #2c2c2c;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
         .chart-container {
              background-color: #fff;
              border-radius: 8px;
              padding: 15px;
              box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+             height: 400px; /* Definido para os gráficos de relatórios */
+        }
+        body.dark-mode .chart-container {
+            background-color: #2c2c2c;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
         .chart-controls .btn-group { margin-bottom: 20px; }
 
@@ -408,7 +425,11 @@
         }
         .notification-icon:hover { color: #800080; }
         
-        .user-info-section { display: flex; align-items: center; }
+        .user-info-section { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; /* Adicionado espaço entre os itens do header */
+        }
         .user-info-section .fw-bold { color: #55345a; margin-right: 12px; }
         .calendar-header {
             display: flex;
@@ -487,15 +508,11 @@
         <div class="sidebar-logo">LBrothers</div>
         
         <div class="d-flex justify-content-between mb-2"> 
-            <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" style="width: 48%;">
+            <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" style="width: 100%;">
                 <i class="fas fa-chevron-left"></i>
                 <span class="button-text ms-2">Recolher</span>
             </button>
-            <button class="sidebar-toggle-btn" id="dark-mode-toggle-btn" style="width: 48%;">
-                <i class="fas fa-sun"></i>
-                <span class="button-text ms-2">Escuro</span>
-            </button>
-        </div>
+            </div>
 
         <div class="menu-list">
             <a class="menu-item active" href="#" id="menu-dashboard">
@@ -514,19 +531,11 @@
                 <div class="button-icon"><i class="fas fa-cogs"></i></div>
                 <div class="button-text">Serviços</div>
             </a>
-            <a class="menu-item" href="#">
-                <div class="button-icon"><i class="fas fa-user-tie"></i></div>
-                <div class="button-text">Funcionários</div>
-            </a>
             <a class="menu-item" href="#" id="menu-reports">
                 <div class="button-icon"><i class="fas fa-chart-bar"></i></div>
                 <div class="button-text">Relatórios</div>
             </a>
-            <a class="menu-item" href="#">
-                <div class="button-icon"><i class="fas fa-cog"></i></div>
-                <div class="button-text">Configurações</div>
-            </a>
-        </div>
+            </div>
         
         <a class="menu-item menu-logout" href="index.html" id="menu-logout">
             <div class="button-icon"><i class="fas fa-sign-out-alt"></i></div>
@@ -558,7 +567,16 @@
                             <a href="#" class="btn btn-link btn-sm text-primary" style="font-size: 0.85em;">Ver todos</a>
                         </div>
                     </div>
-                    </div>
+                </div>
+
+                <a href="#" class="header-action-btn text-decoration-none" id="menu-settings" title="Configurações">
+                    <i class="fas fa-cog"></i>
+                </a>
+
+                <a href="#" class="header-action-btn text-decoration-none" id="dark-mode-toggle-btn" title="Alternar Modo Escuro">
+                    <i class="fas fa-sun"></i>
+                </a>
+
                 <img src="https://tse1.mm.bing.net/th/id/OIP.-6AG_jNvFeSaHutuhL8SNQHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Foto de Perfil" class="profile-img">
                 <span class="fw-bold">Admin</span>
             </div>
@@ -690,7 +708,7 @@
                                             <td>10:30</td>
                                             <td>
                                                 <div class="client-info">
-                                                    <img src="https://f.i.uol.com.br/fotografia/2023/10/24/1698170300653805bcb4214_1698170300_3x4_rt.jpg" alt="Ana Oliveira" class="profile-img">
+                                                    <img src="https://th.bing.com/th/id/OIP.e3nmzkD0jpUThdfFerOjnQHaJ_?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Ana Oliveira" class="profile-img">
                                                     <div>
                                                         <p class="mb-0 fw-bold">Ana Oliveira</p>
                                                         <small class="text-muted">(11) 99876-5432</small>
@@ -722,7 +740,7 @@
                                             <td>13:00</td>
                                             <td>
                                                 <div class="client-info">
-                                                    <img src="https://tse3.mm.bing.net/th/id/OIP.6fHzgSx3elDOxNYNY--6zAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Roberto Santos" class="profile-img">
+                                                    <img src="https://tse4.mm.bing.net/th/id/OIP.stHStTWPWzXznPJ83TvimQHaFn?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Roberto Santos" class="profile-img">
                                                     <div>
                                                         <p class="mb-0 fw-bold">Roberto Santos</p>
                                                         <small class="text-muted">(11) 98765-1234</small>
@@ -731,8 +749,8 @@
                                             </td>
                                             <td>
                                                 <div class="service-info">
-                                                    <p class="mb-0">Cristalização de Pintura</p>
-                                                    <small class="text-muted">R$ 600,00</small>
+                                                    <p class="mb-0">Lavagem Detalhada</p>
+                                                    <small class="text-muted">R$ 180,00</small>
                                                 </div>
                                             </td>
                                             <td>
@@ -754,7 +772,7 @@
                                             <td>15:30</td>
                                             <td>
                                                 <div class="client-info">
-                                                    <img src="https://cdn.britannica.com/10/251610-050-B5D18C82/Ana-de-Armas-2023.jpg" alt="Juliana Costa" class="profile-img">
+                                                    <img src="https://tse4.mm.bing.net/th/id/OIP.Wu1mbPGD3WGxe9MTEYxf8gHaEy?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Juliana Costa" class="profile-img">
                                                     <div>
                                                         <p class="mb-0 fw-bold">Juliana Costa</p>
                                                         <small class="text-muted">(11) 98765-9876</small>
@@ -789,7 +807,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row g-4">
                 <div class="col-md-6">
                     <div class="card card-custom h-100">
@@ -812,8 +830,7 @@
                                         <tr>
                                             <td>
                                                 <div class="client-info">
-                                                    <img src="https://tse4.mm.bing.net/th/id/OIP.FAUX2xPi4mwsAnbg1xE7MwHaE8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="João Silva" class="profile-img">
-                                                    João Silva
+                                                    <img src="https://tse4.mm.bing.net/th/id/OIP.FAUX2xPi4mwsAnbg1xE7MwHaE8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="João Silva" class="profile-img"> João Silva
                                                 </div>
                                             </td>
                                             <td>Polimento</td>
@@ -824,26 +841,24 @@
                                         <tr>
                                             <td>
                                                 <div class="client-info">
-                                                    <img src="https://f.i.uol.com.br/fotografia/2023/10/24/1698170300653805bcb4214_1698170300_3x4_rt.jpg" alt="Maria Santos" class="profile-img">
-                                                    Maria Santos
+                                                    <img src="https://th.bing.com/th/id/OIP.e3nmzkD0jpUThdfFerOjnQHaJ_?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Maria Souza" class="profile-img"> Maria Souza
                                                 </div>
                                             </td>
-                                            <td>Lavagem Detalhada</td>
-                                            <td>20/09/2025</td>
-                                            <td>11:00</td>
-                                            <td><span class="badge bg-warning text-dark">Pendente</span></td>
+                                            <td>Lavagem Premium</td>
+                                            <td>18/09/2025</td>
+                                            <td>14:00</td>
+                                            <td><span class="badge bg-danger">Cancelado</span></td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <div class="client-info">
-                                                    <img src="https://th.bing.com/th/id/R.1d86a70d8e6e8c604b88b6855c9d361e?rik=EU1bde0Y8gBvug&pid=ImgRaw&r=0" alt="Carlos Oliveira" class="profile-img">
-                                                    Carlos Oliveira
+                                                    <img src="https://i.imgur.com/qU3Z4bV.jpeg" alt="Pedro Alvares" class="profile-img"> Pedro Alvares
                                                 </div>
                                             </td>
-                                            <td>Cristalização</td>
-                                            <td>21/09/2025</td>
-                                            <td>14:30</td>
-                                            <td><span class="badge bg-success">Confirmado</span></td>
+                                            <td>Enceramento</td>
+                                            <td>15/09/2025</td>
+                                            <td>10:30</td>
+                                            <td><span class="badge bg-warning">Pendente</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -855,56 +870,85 @@
                 <div class="col-md-6">
                     <div class="card card-custom h-100">
                         <div class="card-header bg-white">
-                            <h5 class="mb-0">Serviços Populares</h5>
+                            <h5 class="mb-0">Serviços Mais Agendados</h5>
                         </div>
                         <div class="card-body">
                             <div class="service-list-item">
-                                <div class="icon-container text-primary"><i class="fas fa-car"></i></div>
-                                <span class="service-name">Polimento</span>
+                                <div class="icon-container text-primary"><i class="fas fa-car-wash"></i></div>
+                                <div class="service-name">Lavagem Premium</div>
                                 <div class="service-progress">
-                                    <div class="progress" style="height: 10px;">
-                                        <div class="progress-bar bg-custom-purple-1" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress" role="progressbar" aria-label="Lavagem Premium" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="height: 10px;">
+                                        <div class="progress-bar bg-custom-purple-1" style="width: 75%"></div>
                                     </div>
                                 </div>
-                                <span>85%</span>
+                                <span class="text-muted">75%</span>
                             </div>
                             <div class="service-list-item">
-                                <div class="icon-container text-success"><i class="fas fa-spray-can"></i></div>
-                                <span class="service-name">Cristalização</span>
+                                <div class="icon-container text-success"><i class="fas fa-car"></i></div>
+                                <div class="service-name">Polimento</div>
                                 <div class="service-progress">
-                                    <div class="progress" style="height: 10px;">
-                                        <div class="progress-bar bg-custom-purple-2" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress" role="progressbar" aria-label="Polimento" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="height: 10px;">
+                                        <div class="progress-bar bg-custom-purple-2" style="width: 50%"></div>
                                     </div>
                                 </div>
-                                <span>70%</span>
+                                <span class="text-muted">50%</span>
                             </div>
                             <div class="service-list-item">
-                                <div class="icon-container text-warning"><i class="fas fa-water-droplet"></i></div>
-                                <span class="service-name">Lavagem Detalhada</span>
+                                <div class="icon-container text-warning"><i class="fas fa-spray-can"></i></div>
+                                <div class="service-name">Detalhe Interior</div>
                                 <div class="service-progress">
-                                    <div class="progress" style="height: 10px;">
-                                        <div class="progress-bar bg-custom-purple-3" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress" role="progressbar" aria-label="Detalhe Interior" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="height: 10px;">
+                                        <div class="progress-bar bg-custom-purple-3" style="width: 30%"></div>
                                     </div>
                                 </div>
-                                <span>60%</span>
+                                <span class="text-muted">30%</span>
                             </div>
                             <div class="service-list-item">
-                                <div class="icon-container text-info"><i class="fas fa-wrench"></i></div>
-                                <span class="service-name">Enceramento</span>
+                                <div class="icon-container text-info"><i class="fas fa-shield-alt"></i></div>
+                                <div class="service-name">Proteção Cerâmica</div>
                                 <div class="service-progress">
-                                    <div class="progress" style="height: 10px;">
-                                        <div class="progress-bar bg-custom-purple-4" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress" role="progressbar" aria-label="Proteção Cerâmica" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="height: 10px;">
+                                        <div class="progress-bar bg-custom-purple-4" style="width: 15%"></div>
                                     </div>
                                 </div>
-                                <span>45%</span>
+                                <span class="text-muted">15%</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="services-view" style="display:none;">
+
+        <div id="appointments-view" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Agenda de Agendamentos</h1>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newAppointmentModal">
+                    <i class="fas fa-plus me-2"></i>Novo Agendamento
+                </button>
             </div>
+
+            <div class="card card-custom p-0">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="appointments-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;">Data/Hora</th>
+                                    <th style="width: 25%;">Cliente</th>
+                                    <th style="width: 20%;">Serviço</th>
+                                    <th style="width: 20%;">Veículo</th>
+                                    <th style="width: 10%;">Status</th>
+                                    <th class="text-end" style="width: 10%;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="clients-view" style="display:none;">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>Agenda de Clientes</h1>
@@ -912,638 +956,945 @@
                     <i class="fas fa-plus me-2"></i>Novo Cliente
                 </button>
             </div>
+
             <div class="card card-custom p-0">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0">
+                        <table class="table table-hover mb-0" id="clients-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 30%;">Nome e Contato</th>
-                                    <th style="width: 15%;" class="text-center">Serviços Agendados</th>
-                                    <th style="width: 25%;">Último Serviço</th>
-                                    <th style="width: 15%;" class="text-center">Ações</th>
+                                    <th style="width: 30%;">Cliente</th>
+                                    <th>Telefone</th>
+                                    <th>Veículo</th>
+                                    <th>Último Serviço</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="clients-table-body">
+                            <tbody>
                                 </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="appointments-view" style="display:none;">
+
+        <div id="services-view" style="display:none;">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>Todos os Agendamentos</h1>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newAppointmentModal">
-                    <i class="fas fa-plus me-2"></i>Novo Agendamento
-                </button>
+                <h1 class="text-primary">Nossos Serviços</h1>
             </div>
-            <div class="card card-custom p-0">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%;">Cliente</th>
-                                    <th style="width: 25%;">Serviço</th>
-                                    <th style="width: 15%;">Data e Hora</th>
-                                    <th style="width: 15%;">Status</th>
-                                    <th style="width: 20%;" class="text-center">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="appointments-table-body">
-                                </tbody>
-                        </table>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-primary"><i class="fas fa-hand-sparkles me-2"></i> Lavagem Premium</h5>
+                            <p class="card-text text-muted">Lavagem completa com produtos importados, incluindo limpeza de rodas, painel, vidros e um acabamento perfeito.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-primary"><i class="fas fa-gem me-2"></i> Polimento Cristalizado</h5>
+                            <p class="card-text text-muted">Remoção de riscos e imperfeições, deixando a pintura com aspecto de nova e com proteção duradoura (até 12 meses).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-primary"><i class="fas fa-couch me-2"></i> Detalhamento Interno</h5>
+                            <p class="card-text text-muted">Limpeza profunda do interior com higienização de estofados, painel, console, teto e todos os componentes.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-primary"><i class="fas fa-shield-alt me-2"></i> Proteção de Pintura</h5>
+                            <p class="card-text text-muted">Aplicação de cerâmica ou polímero para proteger a pintura contra raios UV, chuva ácida e contaminação.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-primary"><i class="fas fa-wind me-2"></i> Higienização do Ar Condicionado</h5>
+                            <p class="card-text text-muted">Limpeza completa do sistema de ar condicionado, eliminando odores e bactérias para melhor qualidade do ar.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-primary"><i class="fas fa-hand-holding-water me-2"></i> Hidratação de Couro</h5>
+                            <p class="card-text text-muted">Hidratação e proteção de bancos e componentes em couro para evitar ressecamento e rachaduras.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div id="reports-view" style="display:none;">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>Relatórios de Desempenho</h1>
-                <div class="btn-group chart-controls" role="group">
-                    <button type="button" class="btn btn-primary active" id="btn-appointments-chart">Agendamentos</button>
-                    <button type="button" class="btn btn-primary" id="btn-profit-chart">Lucro Estimado</button>
-                </div>
+                <h1>Relatórios</h1>
             </div>
-            <div class="card card-custom p-4">
-                <h5 class="mb-3" id="chart-title">Agendamentos por Mês (Últimos 6 meses)</h5>
-                <div class="chart-container" style="max-height: 450px;">
-                    <canvas id="main-chart"></canvas>
-                </div>
-            </div>
-        </div>
-        </div>
-</div>
 
-<div class="modal fade" id="newAppointmentModal" tabindex="-1" aria-labelledby="newAppointmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newAppointmentModalLabel">Novo Agendamento</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <h6 class="text-muted mb-3">Informações do Cliente</h6>
-                    <div class="mb-3">
-                        <label for="clientName" class="form-label">Nome do Cliente</label>
-                        <input type="text" class="form-control" id="clientName" placeholder="Ex: João da Silva">
-                    </div>
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label for="clientPhone" class="form-label">Telefone</label>
-                            <input type="text" class="form-control" id="clientPhone" placeholder="(00) 00000-0000" maxlength="15">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Volume de Agendamentos</h5>
                         </div>
-                        <div class="col-md-6">
-                            <label for="clientEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="clientEmail" placeholder="joao@email.com">
+                        <div class="card-body chart-container">
+                            <canvas id="appointmentsChart"></canvas>
                         </div>
                     </div>
-                    <h6 class="text-muted mb-3 mt-4">Detalhes do Serviço</h6>
-                    <div class="mb-3">
-                        <label for="serviceType" class="form-label">Serviço</label>
-                        <select class="form-select" id="serviceType">
-                            <option value="">Selecione um serviço</option>
-                            <option value="Polimento cristalizado">Polimento cristalizado</option>
-                            <option value="Lavagem Premium">Lavagem Premium</option>
-                            <option value="Higienização Interna">Higienização Interna</option>
-                            <option value="Cristalização de Pintura">Cristalização de Pintura</option>
-                        </select>
-                    </div>
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label for="appointmentDate" class="form-label">Data</label>
-                            <input type="date" class="form-control" id="appointmentDate">
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Lucro Estimado por Mês</h5>
                         </div>
-                        <div class="col-md-6">
-                            <label for="appointmentTime" class="form-label">Hora</label>
-                            <input type="time" class="form-control" id="appointmentTime">
+                        <div class="card-body chart-container">
+                            <canvas id="profitChart"></canvas>
                         </div>
                     </div>
-                    <h6 class="text-muted mb-3 mt-4">Detalhes do Veículo</h6>
-                    <div class="mb-3">
-                        <label for="vehicleModel" class="form-label">Modelo do Veículo</label>
-                        <input type="text" class="form-control" id="vehicleModel" placeholder="Ex: Honda Civic">
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="vehicleColor" class="form-label">Cor</label>
-                            <input type="text" class="form-control" id="vehicleColor" placeholder="Ex: Preto">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="vehiclePlate" class="form-label">Placa</label>
-                            <input type="text" class="form-control" id="vehiclePlate" placeholder="Ex: ABC1234" maxlength="7">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary">Salvar Agendamento</button>
+                </div>
             </div>
         </div>
+
+        <div class="modal fade" id="newAppointmentModal" tabindex="-1" aria-labelledby="newAppointmentModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="newAppointmentModalLabel">Novo Agendamento</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="clientName" class="form-label">Nome do Cliente</label>
+                                <input type="text" class="form-control" id="clientName" placeholder="Ex: João da Silva">
+                            </div>
+                            <div class="mb-3">
+                                <label for="appointmentDate" class="form-label">Data</label>
+                                <input type="date" class="form-control" id="appointmentDate">
+                            </div>
+                            <div class="mb-3">
+                                <label for="appointmentTime" class="form-label">Hora</label>
+                                <input type="time" class="form-control" id="appointmentTime">
+                            </div>
+                            <div class="mb-3">
+                                <label for="serviceType" class="form-label">Serviço</label>
+                                <select class="form-select" id="serviceType">
+                                    <option selected>Selecione um Serviço</option>
+                                    <option value="1">Lavagem Simples</option>
+                                    <option value="2">Lavagem Premium</option>
+                                    <option value="3">Polimento Completo</option>
+                                    <option value="4">Higienização Interna</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="vehicleModel" class="form-label">Modelo do Veículo</label>
+                                <input type="text" class="form-control" id="vehicleModel" placeholder="Ex: Honda Civic">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary">Agendar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // --- DUMMY DATA AND UTILITY FUNCTIONS FOR CLIENTS/APPOINTMENTS VIEWS ---
-    const placeholderImages = [
-        "https://randomuser.me/api/portraits/men/1.jpg", "https://randomuser.me/api/portraits/women/2.jpg", "https://randomuser.me/api/portraits/men/3.jpg", "https://randomuser.me/api/portraits/women/4.jpg", "https://randomuser.me/api/portraits/men/5.jpg", "https://randomuser.me/api/portraits/women/6.jpg", "https://randomuser.me/api/portraits/men/7.jpg", "https://randomuser.me/api/portraits/women/8.jpg", "https://randomuser.me/api/portraits/men/9.jpg", "https://randomuser.me/api/portraits/women/10.jpg",
-        "https://randomuser.me/api/portraits/men/11.jpg", "https://randomuser.me/api/portraits/women/12.jpg", "https://randomuser.me/api/portraits/men/13.jpg", "https://randomuser.me/api/portraits/women/14.jpg", "https://randomuser.me/api/portraits/men/15.jpg", "https://randomuser.me/api/portraits/women/16.jpg", "https://randomuser.me/api/portraits/men/17.jpg", "https://randomuser.me/api/portraits/women/18.jpg", "https://randomuser.me/api/portraits/men/19.jpg", "https://randomuser.me/api/portraits/women/20.jpg",
-        "https://randomuser.me/api/portraits/men/21.jpg", "https://randomuser.me/api/portraits/women/22.jpg", "https://randomuser.me/api/portraits/men/23.jpg", "https://randomuser.me/api/portraits/women/24.jpg"
-    ]; // Extended list of placeholder images
+    // Mock Data
+    
+    // Mock Appointments Data
+    const mockAppointments = [
+        { 
+            name: 'Carlos Silva', 
+            email: 'carlos.silva@exemplo.com', 
+            phone: '(11) 98765-4321', 
+            avatar: 'https://tse4.mm.bing.net/th/id/OIP.FAUX2xPi4mwsAnbg1xE7MwHaE8?rs=1&pid=ImgDetMain&o=7&rm=3', // Masculino - Mantido
+            date: '05/10/2025', 
+            time: '08:00', 
+            service: 'Polimento Completo', 
+            vehicle: 'Toyota Corolla', 
+            color: 'Preto', 
+            plate: 'ABC1D234', 
+            status: 'Concluído', 
+            statusClass: 'badge-completed' 
+        },
+        { 
+            name: 'Ana Oliveira', 
+            email: 'ana.oliveira@exemplo.com', 
+            phone: '(11) 99876-5432', 
+            avatar: 'https://th.bing.com/th/id/OIP.e3nmzkD0jpUThdfFerOjnQHaJ_?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3', // Feminino - Mantido
+            date: '05/10/2025', 
+            time: '10:30', 
+            service: 'Lavagem Premium', 
+            vehicle: 'Honda Civic', 
+            color: 'Prata', 
+            plate: 'XYZ9A876', 
+            status: 'Em Andamento', 
+            statusClass: 'badge-inprogress' 
+        },
+        { 
+            name: 'Roberto Santos', 
+            email: 'roberto.santos@exemplo.com', 
+            phone: '(11) 99887-7665', 
+            avatar: 'https://i.imgur.com/qU3Z4bV.jpeg', // Masculino - Mantido
+            date: '06/10/2025', 
+            time: '14:00', 
+            service: 'Lavagem Detalhada', 
+            vehicle: 'BMW X5', 
+            color: 'Branco', 
+            plate: 'DEF5G678', 
+            status: 'Confirmado', 
+            statusClass: 'badge-confirmed' 
+        },
+        { 
+            name: 'Juliana Costa', 
+            email: 'juliana.costa@exemplo.com', 
+            phone: '(11) 98765-9876', 
+            avatar: 'https://i.pravatar.cc/150?img=4', // Feminino - Avatar Único
+            date: '06/10/2025', 
+            time: '16:30', 
+            service: 'Higienização Interna', 
+            vehicle: 'Renault Kwid', 
+            color: 'Branco', 
+            plate: 'DEF2G45', 
+            status: 'Concluído', 
+            statusClass: 'badge-completed' 
+        },
+        { 
+            name: 'Gustavo Lima', 
+            email: 'gustavo.lima@exemplo.com', 
+            phone: '(11) 94455-6677', 
+            avatar: 'https://i.pravatar.cc/150?img=1', // Masculino - Avatar Único (Gustavo Lima)
+            date: '07/10/2025', 
+            time: '08:30', 
+            service: 'Polimento Completo', 
+            vehicle: 'Hyundai HB20', 
+            color: 'Azul', 
+            plate: 'GHI3H67', 
+            status: 'Confirmado', 
+            statusClass: 'badge-confirmed' 
+        },
+        { 
+            name: 'Patrícia Ferreira', 
+            email: 'patricia.ferreira@exemplo.com', 
+            phone: '(11) 93388-9900', 
+            avatar: 'https://i.pravatar.cc/150?img=2', // Feminino - Avatar Único (Patrícia Ferreira)
+            date: '07/10/2025', 
+            time: '10:00', 
+            service: 'Remoção de Piche', 
+            vehicle: 'Jeep Renegade', 
+            color: 'Verde', 
+            plate: 'JKL4I89', 
+            status: 'Pendente', 
+            statusClass: 'badge-pending' 
+        },
+        { 
+            name: 'Eduardo Martins', 
+            email: 'eduardo.martins@exemplo.com', 
+            phone: '(11) 92211-3344', 
+            avatar: 'https://i.pravatar.cc/150?img=3', // Masculino - Avatar Único
+            date: '08/10/2025', 
+            time: '12:30', 
+            service: 'Enceramento Premium', 
+            vehicle: 'Fiat Mobi', 
+            color: 'Cinza', 
+            plate: 'MNO5J01', 
+            status: 'Cancelado', 
+            statusClass: 'badge-canceled' 
+        },
+        { 
+            name: 'Tatiane Costa', 
+            email: 'tatiane.costa@exemplo.com', 
+            phone: '(11) 91100-2255', 
+            avatar: 'https://i.pravatar.cc/150?img=5', // Feminino - Avatar Único
+            date: '08/10/2025', 
+            time: '14:30', 
+            service: 'Lavagem Simples', 
+            vehicle: 'Chery QQ', 
+            color: 'Branco', 
+            plate: 'PQR6K23', 
+            status: 'Pendente', 
+            statusClass: 'badge-pending' 
+        }
+    ];
 
-    const firstNames = ["Miguel", "Sophia", "Arthur", "Alice", "Heitor", "Manuela", "Bernardo", "Laura", "Davi", "Valentina", "Lorenzo", "Júlia", "Pedro", "Heloísa", "Gabriel", "Maria", "Enzo", "Luiza", "Lucas", "Lívia", "Rafael", "Rebeca", "Bruno", "Bianca"];
-    const lastNames = ["Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Ferreira", "Alves", "Pereira", "Lima", "Gomes"];
-    const services = ["Polimento Completo", "Cristalização de Pintura", "Lavagem Premium", "Higienização Interna", "Oxi-Sanitização", "Proteção de Pintura", "Vitrificação de Pintura", "Remoção de Chuva Ácida"];
-    const statusList = [{name: "Confirmado", class: "bg-success"}, {name: "Pendente", class: "bg-warning text-dark"}, {name: "Concluído", class: "badge-completed"}, {name: "Cancelado", class: "bg-danger"}, {name: "Em Andamento", class: "badge-inprogress"}];
+    // Mock Clients Data
+    const mockClients = [
+        { 
+            name: 'Carlos Silva', 
+            email: 'carlos.silva@exemplo.com', 
+            phone: '(11) 98765-4321', 
+            avatar: 'https://tse4.mm.bing.net/th/id/OIP.FAUX2xPi4mwsAnbg1xE7MwHaE8?rs=1&pid=ImgDetMain&o=7&rm=3', // Masculino - Mantido
+            vehicle: 'Toyota Corolla', 
+            lastService: 'Polimento Completo', 
+            status: 'Ativo' 
+        },
+        { 
+            name: 'Ana Oliveira', 
+            email: 'ana.oliveira@exemplo.com', 
+            phone: '(11) 99876-5432', 
+            avatar: 'https://th.bing.com/th/id/OIP.e3nmzkD0jpUThdfFerOjnQHaJ_?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3', // Feminino - Mantido
+            vehicle: 'Honda Civic', 
+            lastService: 'Lavagem Premium', 
+            status: 'Ativo' 
+        },
+        { 
+            name: 'Roberto Santos', 
+            email: 'roberto.santos@exemplo.com', 
+            phone: '(11) 99887-7665', 
+            avatar: 'https://tse4.mm.bing.net/th/id/OIP.stHStTWPWzXznPJ83TvimQHaFn?rs=1&pid=ImgDetMain&o=7&rm=3', // Masculino - Mantido
+            vehicle: 'BMW X5', 
+            lastService: 'Lavagem Detalhada', 
+            status: 'Inativo' 
+        },
+        { 
+            name: 'Juliana Costa', 
+            email: 'juliana.costa@exemplo.com', 
+            phone: '(11) 98765-9876', 
+            avatar: 'https://i.pravatar.cc/150?img=4', // Feminino - Avatar Único
+            vehicle: 'Renault Kwid', 
+            lastService: 'Higienização Interna', 
+            status: 'Ativo' 
+        },
+        { 
+            name: 'Gustavo Lima', 
+            email: 'gustavo.lima@exemplo.com', 
+            phone: '(11) 94455-6677', 
+            avatar: 'https://i.pravatar.cc/150?img=1', // Masculino - Avatar Único
+            vehicle: 'Hyundai HB20', 
+            lastService: 'Polimento Completo', 
+            status: 'Ativo' 
+        },
+        { 
+            name: 'Patrícia Ferreira', 
+            email: 'patricia.ferreira@exemplo.com', 
+            phone: '(11) 93388-9900', 
+            avatar: 'https://i.pravatar.cc/150?img=2', // Feminino - Avatar Único
+            vehicle: 'Jeep Renegade', 
+            lastService: 'Remoção de Piche', 
+            status: 'Pendente' 
+        },
+        { 
+            name: 'Eduardo Martins', 
+            email: 'eduardo.martins@exemplo.com', 
+            phone: '(11) 92211-3344', 
+            avatar: 'https://i.pravatar.cc/150?img=3', // Masculino - Avatar Único
+            vehicle: 'Fiat Mobi', 
+            lastService: 'Enceramento Premium', 
+            status: 'Inativo' 
+        },
+        { 
+            name: 'Tatiane Costa', 
+            email: 'tatiane.costa@exemplo.com', 
+            phone: '(11) 91100-2255', 
+            avatar: 'https://i.pravatar.cc/150?img=5', // Feminino - Avatar Único
+            vehicle: 'Chery QQ', 
+            lastService: 'Lavagem Simples', 
+            status: 'Pendente' 
+        }
+    ];
 
-    function getRandomItem(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
+    // --- Start: Appointments View Logic ---
+    function renderAppointmentsTable() {
+        const tableBody = document.querySelector('#appointments-table tbody');
+        tableBody.innerHTML = ''; // Limpa o conteúdo existente
+
+        // Ordena os agendamentos por data e hora (simulação)
+        const sortedAppointments = [...mockAppointments].sort((a, b) => {
+            const dateA = new Date(a.date.split('/').reverse().join('-') + ' ' + a.time);
+            const dateB = new Date(b.date.split('/').reverse().join('-') + ' ' + b.time);
+            return dateA - dateB;
+        });
+
+        sortedAppointments.forEach(appt => {
+            const row = tableBody.insertRow();
+            let statusBadge = `<span class="badge ${appt.statusClass}">${appt.status}</span>`;
+
+            row.innerHTML = `
+                <td>
+                    <p class="mb-0 fw-bold">${appt.date}</p>
+                    <small class="text-muted">${appt.time}</small>
+                </td>
+                <td>
+                    <div class="client-row-info">
+                        <img src="${appt.avatar}" alt="${appt.name}" class="profile-img">
+                        <div class="client-details">
+                            <p class="mb-0 fw-bold">${appt.name}</p>
+                            <small class="text-muted">${appt.phone}</small>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="service-info">
+                        <p class="mb-0">${appt.service}</p>
+                        <small class="text-muted">R$ ${Math.floor(Math.random() * 500) + 50},00</small>
+                    </div>
+                </td>
+                <td>
+                    <div class="vehicle-info">
+                        <p class="mb-0">${appt.vehicle}</p>
+                        <small class="text-muted">${appt.color} - ${appt.plate}</small>
+                    </div>
+                </td>
+                <td>${statusBadge}</td>
+                <td class="action-icons text-end">
+                    <a href="#" class="btn btn-sm btn-view"><i class="fas fa-eye"></i></a>
+                    <a href="#" class="btn btn-sm btn-edit"><i class="fas fa-edit"></i></a>
+                    <a href="#" class="btn btn-sm btn-delete"><i class="fas fa-trash-alt"></i></a>
+                </td>
+            `;
+        });
     }
+    // --- End: Appointments View Logic ---
 
-    function generateRandomPhone() {
-        return `(11) 9${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}`;
-    }
-
-    function generateRandomEmail(name, id) {
-        const cleanName = name.toLowerCase().replace(/ /g, '.').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        return `${cleanName}${id}@ficticio.com.br`;
-    }
-
-    function generateRandomDate() {
-        const day = Math.floor(1 + Math.random() * 28);
-        const month = Math.floor(9 + Math.random() * 4); // Sept to Dec 2025 (Fictional Dates)
-        return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/2025`;
-    }
-
-    function generateRandomTime() {
-        const hour = Math.floor(8 + Math.random() * 10);
-        const minute = Math.random() < 0.5 ? '00' : '30';
-        return `${hour.toString().padStart(2, '0')}:${minute}`;
-    }
-
-    // Generate Clients Data (20 significant entries)
-    const allClients = Array.from({ length: 20 }, (_, i) => {
-        const firstName = getRandomItem(firstNames);
-        const lastName = getRandomItem(lastNames);
-        const name = `${firstName} ${lastName}`;
-        return {
-            id: i + 1,
-            name: name,
-            image: placeholderImages[i], // Use placeholder image
-            phone: generateRandomPhone(), // Fictitious phone
-            email: generateRandomEmail(name, i+1), // Fictitious email
-            totalAppointments: Math.floor(1 + Math.random() * 25),
-            lastService: getRandomItem(services),
-            lastServiceDate: generateRandomDate()
-        };
-    });
-
-    // Generate Appointments Data (20 significant entries)
-    const allAppointments = Array.from({ length: 20 }, (_, i) => {
-        const client = getRandomItem(allClients); // Link appointment to a dummy client
-        const appointmentStatus = getRandomItem(statusList);
-        const appointmentService = getRandomItem(services);
-
-        return {
-            id: i + 1,
-            clientName: client.name,
-            clientImage: client.image,
-            service: appointmentService,
-            date: generateRandomDate(),
-            time: generateRandomTime(),
-            statusName: appointmentStatus.name,
-            statusClass: appointmentStatus.class
-        };
-    });
-
-    // --- POPULATE TABLE FUNCTIONS ---
-
-    function populateClientsTable(clients) {
-        const tableBody = document.getElementById('clients-table-body');
+    // --- Start: Clients View Logic (Novo) ---
+    function renderClientsTable() {
+        const tableBody = document.querySelector('#clients-table tbody');
         if (!tableBody) return;
-        tableBody.innerHTML = ''; // Clear existing data
+        tableBody.innerHTML = ''; 
 
-        clients.forEach(client => {
-            const row = document.createElement('tr');
+        mockClients.forEach(client => {
+            const row = tableBody.insertRow();
+            let statusClass = client.status === 'Ativo' ? 'bg-success' : client.status === 'Pendente' ? 'bg-warning' : 'bg-secondary';
+            let statusBadge = `<span class="badge ${statusClass}">${client.status}</span>`;
+
             row.innerHTML = `
                 <td>
                     <div class="client-row-info">
-                        <img src="${client.image}" alt="${client.name}" class="profile-img">
+                        <img src="${client.avatar}" alt="${client.name}" class="profile-img">
                         <div class="client-details">
                             <p class="mb-0 fw-bold">${client.name}</p>
-                            <small class="text-muted"><i class="fas fa-phone me-1"></i>${client.phone}</small>
-                            <small class="text-muted"><i class="fas fa-envelope me-1"></i>${client.email}</small>
+                            <small class="text-muted">${client.email}</small>
                         </div>
                     </div>
                 </td>
-                <td class="text-center">
-                    <span class="fs-4 fw-bold text-primary">${client.totalAppointments}</span>
-                </td>
-                <td>
-                    <p class="mb-0">${client.lastService}</p>
-                    <small class="text-muted">${client.lastServiceDate}</small>
-                </td>
-                <td class="action-icons text-center">
-                    <a href="#" class="btn btn-sm btn-view" title="Ver Histórico"><i class="fas fa-eye"></i></a>
-                    <a href="#" class="btn btn-sm btn-edit" title="Editar Cliente"><i class="fas fa-edit"></i></a>
+                <td>${client.phone}</td>
+                <td>${client.vehicle}</td>
+                <td>${client.lastService}</td>
+                <td>${statusBadge}</td>
+                <td class="action-icons text-end">
+                    <a href="#" class="btn btn-sm btn-view"><i class="fas fa-eye"></i></a>
+                    <a href="#" class="btn btn-sm btn-edit"><i class="fas fa-edit"></i></a>
                 </td>
             `;
-            tableBody.appendChild(row);
         });
     }
+    // --- End: Clients View Logic ---
 
-    function populateAppointmentsTable(appointments) {
-        const tableBody = document.getElementById('appointments-table-body');
-        if (!tableBody) return;
-        tableBody.innerHTML = ''; // Clear existing data
+    // --- Start: Notification Logic ---
+    // Mock Notification Data (Kept to maintain existing functionality)
+    const mockNotifications = [
+        { id: 1, type: 'appointment', message: 'Novo agendamento confirmado: Ana Oliveira (10:30).', time: '5 min atrás', read: false, avatar: 'https://th.bing.com/th/id/OIP.e3nmzkD0jpUThdfFerOjnQHaJ_?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3' },
+        { id: 2, type: 'client', message: 'Novo cliente cadastrado: Roberto Santos.', time: '1 hora atrás', read: false, avatar: 'https://i.imgur.com/qU3Z4bV.jpeg' },
+        { id: 3, type: 'report', message: 'Relatório mensal de vendas pronto para visualização.', time: '1 dia atrás', read: true, avatar: 'https://tse1.mm.bing.net/th/id/OIP.-6AG_jNvFeSaHutuhL8SNQHaLH?rs=1&pid=ImgDetMain&o=7&rm=3' }, // Admin URL
+        { id: 4, type: 'appointment', message: 'O agendamento de Carlos Silva foi concluído.', time: '2 dias atrás', read: true, avatar: 'https://tse4.mm.bing.net/th/id/OIP.FAUX2xPi4mwsAnbg1xE7MwHaE8?rs=1&pid=ImgDetMain&o=7&rm=3' }
+    ];
 
-        appointments.forEach(app => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>
-                    <div class="client-info">
-                        <img src="${app.clientImage}" alt="${app.clientName}" class="profile-img">
-                        <div>
-                            <p class="mb-0 fw-bold">${app.clientName}</p>
-                            <small class="text-muted">ID: ${app.id}</small>
-                        </div>
+    const notificationIcon = document.getElementById('notification-icon');
+    const notificationDropdown = document.getElementById('notification-dropdown');
+
+    function renderNotifications() {
+        const list = document.getElementById('notifications-list');
+        list.innerHTML = '';
+        let unreadCount = 0;
+
+        mockNotifications.forEach(notif => {
+            if (!notif.read) {
+                unreadCount++;
+            }
+
+            let iconClass = 'fas fa-info-circle text-primary';
+            if (notif.type === 'appointment') iconClass = 'fas fa-calendar-check text-success';
+            if (notif.type === 'report') iconClass = 'fas fa-chart-bar text-warning';
+            if (notif.type === 'client') iconClass = 'fas fa-user-times text-danger';
+
+            const html = `
+                <a href="#" class="notification-item ${notif.read ? '' : 'unread'}">
+                    <img src="${notif.avatar}" alt="Avatar" class="notification-avatar">
+                    <div class="notification-body">
+                        ${notif.message}
+                        <div class="notification-time">${notif.time}</div>
                     </div>
-                </td>
-                <td>
-                    <p class="mb-0">${app.service}</p>
-                    <small class="text-muted">R$ ${Math.floor(100 + Math.random() * 900)}</small>
-                </td>
-                <td>
-                    <p class="mb-0 fw-bold">${app.date}</p>
-                    <small class="text-muted">${app.time}</small>
-                </td>
-                <td>
-                    <span class="badge ${app.statusClass}">${app.statusName}</span>
-                </td>
-                <td class="action-icons text-center">
-                    <a href="#" class="btn btn-sm btn-view" title="Ver Detalhes"><i class="fas fa-eye"></i></a>
-                    <a href="#" class="btn btn-sm btn-edit" title="Editar Status"><i class="fas fa-edit"></i></a>
-                    <a href="#" class="btn btn-sm btn-delete" title="Cancelar Agendamento"><i class="fas fa-trash-alt"></i></a>
-                </td>
+                </a>
             `;
-            tableBody.appendChild(row);
+            list.innerHTML += html;
         });
+
+        const badge = document.getElementById('notification-badge');
+        if (unreadCount > 0) {
+            badge.textContent = unreadCount;
+            badge.style.display = 'block';
+        } else {
+            badge.style.display = 'none';
+        }
     }
 
-    // --- EXISTING LOGIC RE-IMPLEMENTED ---
+    // Renderiza as notificações na inicialização
+    renderNotifications();
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
-        const darkModeToggleBtn = document.getElementById('dark-mode-toggle-btn');
-        const notificationIcon = document.getElementById('notification-icon');
-        const notificationDropdown = document.getElementById('notification-dropdown');
+    notificationIcon.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation(); // Evita que o clique feche imediatamente
+        notificationDropdown.classList.toggle('active');
 
-        // Notification Dummy Data & Logic
-        const notificationsData = [
-            { id: 1, title: "Novo Agendamento Confirmado", time: "5 min atrás", icon: "fas fa-check-circle", isUnread: true, link: "#" },
-            { id: 2, title: "Cliente João Silva cadastrado", time: "1 hora atrás", icon: "fas fa-user-plus", isUnread: true, link: "#" },
-            { id: 3, title: "Pagamento recebido de R$550", time: "3 horas atrás", icon: "fas fa-dollar-sign", isUnread: false, link: "#" },
-            { id: 4, title: "Lembrete: Agendamento das 14h", time: "Ontem", icon: "fas fa-bell", isUnread: false, link: "#" },
-        ];
-        
-        function populateNotifications() {
-            const list = document.getElementById('notifications-list');
-            if (!list) return;
-            list.innerHTML = '';
-            let unreadCount = 0;
+        // Marca as notificações como lidas ao abrir o dropdown (simulação)
+        mockNotifications.forEach(n => n.read = true);
+        renderNotifications(); // Re-renderiza para atualizar o badge
+    });
 
-            notificationsData.forEach(item => {
-                if (item.isUnread) unreadCount++;
-                const itemClass = item.isUnread ? 'unread' : '';
-                const itemHtml = `
-                    <a href="${item.link}" class="notification-item ${itemClass}">
-                        <div class="notification-avatar bg-primary d-flex align-items-center justify-content-center text-white">
-                             <i class="${item.icon}"></i>
-                        </div>
-                        <div class="notification-body">
-                            <p class="mb-0">${item.title}</p>
-                            <small class="notification-time">${item.time}</small>
-                        </div>
-                    </a>
-                `;
-                list.insertAdjacentHTML('beforeend', itemHtml);
-            });
-
-            // Update badge
-            const badge = document.getElementById('notification-badge');
-            if (unreadCount > 0) {
-                badge.textContent = unreadCount;
-                badge.style.display = 'block';
-            } else {
-                badge.style.display = 'none';
-            }
+    // Fecha o dropdown se clicar fora
+    document.addEventListener('click', function(e) {
+        if (!notificationDropdown.contains(e.target) && !notificationIcon.contains(e.target)) {
+            notificationDropdown.classList.remove('active');
         }
-        populateNotifications(); // Initial load
+    });
+    // --- End: Notification Logic ---
 
-        // Notification Dropdown Toggle
-        notificationIcon.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation(); // Prevent document click from immediately closing
-            notificationDropdown.classList.toggle('active');
-        });
+    // Modo Escuro (Dark Mode) - Kept to maintain existing functionality
+    const moonIcon = 'fa-moon';
+    const sunIcon = 'fa-sun';
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!notificationDropdown.contains(e.target) && !notificationIcon.contains(e.target)) {
-                notificationDropdown.classList.remove('active');
-            }
-        });
+    // Variáveis para os gráficos, inicializadas como null (Dashboard e Reports)
+    let myChart = null; // Gráfico de vendas (Dashboard)
+    let AppointmentsChart = null; // Gráfico de agendamentos (Reports)
+    let ProfitChart = null; // Gráfico de lucro (Reports)
 
+    function getChartColors() {
+        const purpleColor = '#800080';
+        const lightPurpleColor = '#CC99FF';
 
-        // Calendar Logic
-        const calendarGrid = document.getElementById('calendar-grid');
-        const currentMonthYear = document.getElementById('current-month-year');
-        const prevMonthBtn = document.getElementById('prev-month-btn');
-        const nextMonthBtn = document.getElementById('next-month-btn');
-        let currentDate = new Date();
+        // Cores padrão (modo claro)
+        let textColor = 'rgba(0, 0, 0, 0.8)';
+        let gridColor = 'rgba(0, 0, 0, 0.1)';
 
-        // Sample data for appointments marked on the calendar
-        const appointmentsOnDays = [
-            { day: 5, count: 2 },
-            { day: 10, count: 1 },
-            { day: 15, count: 3 },
-            { day: 22, count: 1 },
-            { day: 25, count: 2 },
-        ];
-
-        function renderCalendar(date) {
-            const year = date.getFullYear();
-            const month = date.getMonth();
-            const today = new Date();
-
-            currentMonthYear.textContent = date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }).replace(/\b\w/g, l => l.toUpperCase());
-            
-            calendarGrid.innerHTML = `
-                <div class="calendar-weekday">Dom</div>
-                <div class="calendar-weekday">Seg</div>
-                <div class="calendar-weekday">Ter</div>
-                <div class="calendar-weekday">Qua</div>
-                <div class="calendar-weekday">Qui</div>
-                <div class="calendar-weekday">Sex</div>
-                <div class="calendar-weekday">Sáb</div>
-            `;
-
-            const firstDayOfMonth = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-            // Fill leading empty days
-            for (let i = 0; i < firstDayOfMonth; i++) {
-                calendarGrid.insertAdjacentHTML('beforeend', `<div class="calendar-day text-muted"></div>`);
-            }
-
-            // Fill days of the month
-            for (let day = 1; day <= daysInMonth; day++) {
-                const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-                const todayClass = isToday ? 'today' : '';
-                const appointmentData = appointmentsOnDays.find(a => a.day === day);
-                const dotHtml = appointmentData ? `<div class="appointment-dot rounded-circle position-absolute bottom-0 end-0 me-1 mb-1" style="width: 8px; height: 8px;"></div>` : '';
-                
-                const dayHtml = `
-                    <div class="calendar-day ${todayClass}">
-                        ${day}
-                        ${dotHtml}
-                    </div>
-                `;
-                calendarGrid.insertAdjacentHTML('beforeend', dayHtml);
-            }
+        // Verifica o modo atual
+        if (document.body.classList.contains('dark-mode')) {
+            textColor = '#CC99FF';
+            gridColor = 'rgba(204, 153, 255, 0.1)';
         }
 
-        prevMonthBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar(currentDate);
-        });
+        return { purpleColor, lightPurpleColor, textColor, gridColor };
+    }
 
-        nextMonthBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar(currentDate);
-        });
+    function updateChartColors(chart) {
+        if (!chart) return;
+        const { purpleColor, lightPurpleColor, textColor, gridColor } = getChartColors();
 
-        renderCalendar(currentDate);
-
-        // Chart Logic (Reports View)
-        let myChart = null;
-
-        const appointmentsChartData = {
-            labels: ['Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro'],
-            datasets: [{
-                label: 'Agendamentos',
-                data: [12, 19, 3, 5, 10, 20],
-                backgroundColor: [
-                    '#800080', // Roxo principal
-                    '#6b4c7d',
-                    '#9c6cba',
-                    '#b89cd8',
-                    '#cc99ff',
-                    '#55345a'
-                ],
-                borderColor: 'transparent',
-                borderWidth: 1
-            }]
-        };
-
-        const profitChartData = {
-            labels: ['Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro'],
-            datasets: [{
-                label: 'Lucro Estimado (R$)',
-                data: [3500, 5200, 1500, 4800, 7000, 6500],
-                backgroundColor: 'rgba(0, 123, 255, 0.5)',
-                borderColor: '#007bff',
-                borderWidth: 2,
-                type: 'line', // Define como gráfico de linha
-                fill: true
-            }]
-        };
+        // Atualiza cores dos eixos
+        chart.options.scales.x.ticks.color = textColor;
+        chart.options.scales.x.grid.color = gridColor;
+        chart.options.scales.y.ticks.color = textColor;
+        chart.options.scales.y.grid.color = gridColor;
         
-        const chartTitle = document.getElementById('chart-title');
-        const btnAppointmentsChart = document.getElementById('btn-appointments-chart');
-        const btnProfitChart = document.getElementById('btn-profit-chart');
+        // Atualiza cores das legendas
+        if (chart.options.plugins.legend) {
+            chart.options.plugins.legend.labels.color = textColor;
+        }
 
-        function initializeChart(type = 'appointments') {
-            if (myChart) {
-                myChart.destroy();
+        // Atualiza cores dos dados (dependendo do tipo de gráfico)
+        chart.data.datasets.forEach(dataset => {
+            if (chart.config.type === 'bar') {
+                dataset.backgroundColor = lightPurpleColor;
+                dataset.borderColor = purpleColor;
+            } else if (chart.config.type === 'line') {
+                dataset.backgroundColor = 'rgba(204, 153, 255, 0.2)'; // Fundo com transparência
+                dataset.borderColor = purpleColor;
+                dataset.pointBackgroundColor = purpleColor;
+            }
+        });
+
+        chart.update();
+    }
+
+
+    document.getElementById('dark-mode-toggle-btn').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const icon = this.querySelector('.fas');
+        
+        if (document.body.classList.contains('dark-mode')) {
+            icon.classList.remove(sunIcon);
+            icon.classList.add(moonIcon);
+            this.title = "Alternar Modo Claro";
+        } else {
+            icon.classList.remove(moonIcon);
+            icon.classList.add(sunIcon);
+            this.title = "Alternar Modo Escuro";
+        }
+
+        // Atualiza as cores dos gráficos
+        updateChartColors(myChart);
+        updateChartColors(AppointmentsChart);
+        updateChartColors(ProfitChart);
+    });
+
+    // Sidebar collapse toggle (Kept to maintain existing functionality)
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('main-content');
+    const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
+
+    sidebarToggleBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+        const toggleBtnIcon = this.querySelector('.fas');
+
+        if (sidebar.classList.contains('collapsed')) {
+            toggleBtnIcon.classList.remove('fa-chevron-left');
+            toggleBtnIcon.classList.add('fa-chevron-right');
+        } else {
+            toggleBtnIcon.classList.remove('fa-chevron-right');
+            toggleBtnIcon.classList.add('fa-chevron-left');
+        }
+    });
+
+    // --- START: Calendar Implementation ---
+    const calendarGrid = document.getElementById('calendar-grid');
+    const monthYearDisplay = document.getElementById('current-month-year');
+    const prevMonthBtn = document.getElementById('prev-month-btn');
+    const nextMonthBtn = document.getElementById('next-month-btn');
+
+    let currentDate = new Date();
+    const today = new Date();
+    const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+    // Função mock para verificar agendamentos (simulação)
+    function hasAppointment(year, month, day) {
+        // Formato da data no mock: DD/MM/YYYY
+        const dateStr = `${day.toString().padStart(2, '0')}/${(month + 1).toString().padStart(2, '0')}/${year}`;
+        
+        // Verifica se a data do calendário corresponde a uma data de agendamento mock
+        return mockAppointments.some(appt => appt.date === dateStr) || (day % 7 === 5);
+    }
+
+    function renderCalendar() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        // Atualiza o cabeçalho
+        monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
+
+        // Remove todos os dias anteriores, mantendo os dias da semana
+        const existingDays = calendarGrid.querySelectorAll('.calendar-day');
+        existingDays.forEach(day => day.remove());
+
+        // 1. Encontra o primeiro dia do mês e o último dia do mês
+        const firstDayOfMonth = new Date(year, month, 1);
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        
+        // Obtém o dia da semana do primeiro dia (0=Dom, 1=Seg, ..., 6=Sáb)
+        let startingDay = firstDayOfMonth.getDay();
+
+        // Adiciona células vazias para preencher o início da semana
+        for (let i = 0; i < startingDay; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.classList.add('calendar-day', 'text-muted');
+            calendarGrid.appendChild(emptyCell);
+        }
+
+        // 2. Adiciona os dias do mês
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayCell = document.createElement('div');
+            dayCell.classList.add('calendar-day');
+            dayCell.textContent = day;
+
+            // Verifica se é o dia atual
+            if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                dayCell.classList.add('today');
             }
 
-            const ctx = document.getElementById('main-chart').getContext('2d');
-            let data, titleText, chartType;
-
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            const gridColor = isDarkMode ? 'rgba(68, 68, 68, 1)' : 'rgba(0, 0, 0, 0.1)';
-            const textColor = isDarkMode ? '#CC99FF' : '#212529';
-            
-            if (type === 'appointments') {
-                data = appointmentsChartData;
-                titleText = 'Agendamentos por Mês (Últimos 6 meses)';
-                chartType = 'bar';
-                btnAppointmentsChart.classList.add('active');
-                btnProfitChart.classList.remove('active');
-            } else {
-                data = profitChartData;
-                titleText = 'Lucro Estimado por Mês (Últimos 6 meses)';
-                chartType = 'line';
-                btnAppointmentsChart.classList.remove('active');
-                btnProfitChart.classList.add('active');
+            // Adiciona ponto se houver agendamento
+            if (hasAppointment(year, month, day)) {
+                const dot = document.createElement('span');
+                dot.classList.add('appointment-dot');
+                dot.style.cssText = 'width: 6px; height: 6px; border-radius: 50%; position: absolute; bottom: 5px; right: 5px;';
+                dayCell.appendChild(dot);
             }
-            
-            chartTitle.textContent = titleText;
 
-            myChart = new Chart(ctx, {
-                type: chartType,
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: gridColor,
-                            },
-                            ticks: {
-                                color: textColor
-                            }
+            calendarGrid.appendChild(dayCell);
+        }
+    }
+
+    prevMonthBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    });
+
+    nextMonthBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    });
+
+    // Chama a renderização do calendário na inicialização
+    renderCalendar();
+    // --- END: Calendar Implementation ---
+
+    // Renderiza o gráfico de vendas padrão do Dashboard (Kept)
+    const ctx = document.getElementById('salesChart');
+    if (ctx) {
+        const { purpleColor, lightPurpleColor, textColor, gridColor } = getChartColors();
+        const data = {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+            datasets: [{
+                label: 'Faturamento (R$)',
+                data: [3000, 4500, 5200, 4800, 6000, 5500],
+                backgroundColor: lightPurpleColor,
+                borderColor: purpleColor,
+                borderWidth: 1,
+                borderRadius: 5,
+            }]
+        };
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: textColor // Aplica a cor do texto
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { 
+                            color: gridColor // Aplica a cor da linha de grade
                         },
-                        x: {
-                            grid: {
-                                color: gridColor,
-                            },
-                            ticks: {
-                                color: textColor
-                            }
+                        ticks: {
+                            color: textColor // Aplica a cor do texto
                         }
                     },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: textColor // Cor da legenda no modo escuro
+                    y: {
+                        beginAtZero: true,
+                        grid: { 
+                            color: gridColor 
+                        },
+                        ticks: {
+                            color: textColor,
+                            callback: function(value) {
+                                return 'R$' + value.toLocaleString('pt-BR');
                             }
                         }
                     }
                 }
-            });
+            }
+        };
+        myChart = new Chart(ctx, config);
+    }
+    
+    // --- START: Reports Charts Implementation ---
+    function renderReportsCharts() {
+        const { purpleColor, lightPurpleColor, textColor, gridColor } = getChartColors();
+
+        // 1. Appointments Chart
+        const ctxAppointments = document.getElementById('appointmentsChart');
+        if (ctxAppointments && !AppointmentsChart) {
+             const dataAppointments = {
+                labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+                datasets: [{
+                    label: 'Nº Agendamentos',
+                    data: [45, 60, 52, 70, 85, 90, 75, 65, 80, 95, 100, 88],
+                    backgroundColor: lightPurpleColor,
+                    borderColor: purpleColor,
+                    borderWidth: 1,
+                    borderRadius: 5,
+                }]
+            };
+            const configAppointments = {
+                type: 'bar',
+                data: dataAppointments,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: textColor
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: gridColor },
+                            ticks: { color: textColor }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: gridColor },
+                            ticks: { color: textColor }
+                        }
+                    }
+                }
+            };
+            AppointmentsChart = new Chart(ctxAppointments, configAppointments);
+        } else if (AppointmentsChart) {
+            updateChartColors(AppointmentsChart);
         }
-        
-        btnAppointmentsChart.addEventListener('click', () => initializeChart('appointments'));
-        btnProfitChart.addEventListener('click', () => initializeChart('profit'));
-        
 
-        // View Switcher Logic
-        const menuItems = document.querySelectorAll('.menu-item');
-        const views = ['dashboard-view', 'appointments-view', 'clients-view', 'services-view', 'reports-view'];
+        // 2. Profit Chart
+        const ctxProfit = document.getElementById('profitChart');
+        if (ctxProfit && !ProfitChart) {
+            const dataProfit = {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                datasets: [{
+                    label: 'Lucro (R$)',
+                    data: [2500, 3800, 4200, 3900, 5000, 4500], // Valores realistas entre R$2k e R$5k
+                    backgroundColor: 'rgba(128, 0, 128, 0.2)', // Roxo com transparência para a área
+                    borderColor: purpleColor,
+                    borderWidth: 2,
+                    fill: true, // Habilita o preenchimento da área
+                    tension: 0.4, // Curva suave na linha
+                    pointBackgroundColor: purpleColor,
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: purpleColor
+                }]
+            };
+            const configProfit = {
+                type: 'line',
+                data: dataProfit,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: textColor }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: gridColor },
+                            ticks: { color: textColor }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            min: 0, 
+                            max: 6000, // Ajuste para melhor visualização dos valores (R$2k - R$5k)
+                            grid: { color: gridColor },
+                            ticks: { 
+                                color: textColor,
+                                callback: function(value) {
+                                    return 'R$' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            ProfitChart = new Chart(ctxProfit, configProfit);
+        } else if (ProfitChart) {
+            updateChartColors(ProfitChart);
+        }
+    }
+    
+    // --- END: Reports Charts Implementation ---
 
-        function showView(viewId) {
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- START: New View Switching Logic ---
+        const views = ['dashboard-view', 'services-view', 'appointments-view', 'clients-view', 'reports-view'];
+        const menuItems = document.querySelectorAll('.sidebar .menu-item');
+
+        function showView(viewId, clickedMenuId) {
+            // 1. Hide all views
             views.forEach(id => {
                 const viewElement = document.getElementById(id);
                 if (viewElement) {
                     viewElement.style.display = 'none';
                 }
             });
-            const activeView = document.getElementById(viewId);
-            if (activeView) {
-                activeView.style.display = 'block';
+
+            // 2. Show the requested view
+            const targetView = document.getElementById(viewId);
+            if (targetView) {
+                targetView.style.display = 'block';
             }
 
-            // Special logic for active menu item
-            menuItems.forEach(item => item.classList.remove('active'));
-            const activeMenuItem = document.getElementById('menu-' + viewId.replace('-view', ''));
+            // 3. Update active menu item
+            menuItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            const activeMenuItem = document.getElementById(clickedMenuId);
             if (activeMenuItem) {
                 activeMenuItem.classList.add('active');
             }
+
+            // 4. Se a view de relatórios ou appointments for ativada, renderiza o conteúdo
+            if (viewId === 'reports-view') {
+                renderReportsCharts();
+            }
+            if (viewId === 'appointments-view') {
+                renderAppointmentsTable();
+            }
+            if (viewId === 'clients-view') {
+                renderClientsTable();
+            }
         }
 
-        // Initial view load
-        showView('dashboard-view');
-        // Initial chart load
-        initializeChart('appointments');
+        // Initial state: ensure all non-dashboard views are hidden
+        document.getElementById('services-view').style.display = 'none';
+        const clientsView = document.getElementById('clients-view');
+        if (clientsView) clientsView.style.display = 'none';
+        const appointmentsView = document.getElementById('appointments-view');
+        if (appointmentsView) appointmentsView.style.display = 'none';
+        const reportsView = document.getElementById('reports-view');
+        if (reportsView) reportsView.style.display = 'none';
 
-        // Menu item click listeners
-        document.getElementById('menu-dashboard').addEventListener('click', (e) => { e.preventDefault(); showView('dashboard-view'); });
-        
-        // MODIFIED TO POPULATE WITH DUMMY DATA
-        document.getElementById('menu-appointments').addEventListener('click', (e) => { 
-            e.preventDefault(); 
-            showView('appointments-view'); 
-            populateAppointmentsTable(allAppointments);
+        // Add event listeners for all menu items
+        document.getElementById('menu-dashboard').addEventListener('click', (e) => {
+            e.preventDefault();
+            showView('dashboard-view', 'menu-dashboard');
         });
 
-        // MODIFIED TO POPULATE WITH DUMMY DATA
-        document.getElementById('menu-clients').addEventListener('click', (e) => { 
-            e.preventDefault(); 
-            showView('clients-view'); 
-            populateClientsTable(allClients); 
+        document.getElementById('menu-services').addEventListener('click', (e) => {
+            e.preventDefault();
+            showView('services-view', 'menu-services');
         });
         
-        // Placeholder for services view - keeping existing logic
-        document.getElementById('menu-services').addEventListener('click', (e) => { e.preventDefault(); showView('services-view'); /* populateServicesList(); */ });
-        document.getElementById('menu-reports').addEventListener('click', (e) => { e.preventDefault(); showView('reports-view'); initializeChart('appointments'); });
-        
-
-
-        // Dark mode toggle
-        darkModeToggleBtn.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            const toggleBtnIcon = this.querySelector('.fas');
-            const buttonText = this.querySelector('.button-text');
-
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            const gridColor = isDarkMode ? 'rgba(68, 68, 68, 1)' : 'rgba(0, 0, 0, 0.1)';
-            const textColor = isDarkMode ? '#CC99FF' : '#212529';
-
-            if (isDarkMode) {
-                toggleBtnIcon.classList.remove('fa-sun');
-                toggleBtnIcon.classList.add('fa-moon');
-                buttonText.textContent = 'Claro';
-                
-                // Atualiza a cor dos textos e linhas do gráfico para o modo escuro
-                if (myChart) {
-                    myChart.options.scales.x.ticks.color = textColor;
-                    myChart.options.scales.y.ticks.color = textColor;
-                    myChart.options.scales.x.grid.color = gridColor;
-                    myChart.options.scales.y.grid.color = gridColor;
-                    myChart.options.plugins.legend.labels.color = textColor;
-                    myChart.update();
-                }
-
-            } else {
-                toggleBtnIcon.classList.remove('fa-moon');
-                toggleBtnIcon.classList.add('fa-sun');
-                buttonText.textContent = 'Escuro';
-                
-                // Retorna a cor dos textos e linhas do gráfico para o modo claro
-                if (myChart) {
-                    myChart.options.scales.x.ticks.color = textColor;
-                    myChart.options.scales.y.ticks.color = textColor;
-                    myChart.options.scales.x.grid.color = gridColor;
-                    myChart.options.scales.y.grid.color = gridColor;
-                    myChart.options.plugins.legend.labels.color = textColor;
-                    myChart.update();
-                }
-            }
+        document.getElementById('menu-appointments').addEventListener('click', (e) => {
+            e.preventDefault();
+            showView('appointments-view', 'menu-appointments');
+            renderAppointmentsTable(); // NEW: Call the function to render the table content
         });
 
-        // Sidebar collapse toggle
-        sidebarToggleBtn.addEventListener('click', function() {
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('expanded');
-            const toggleBtnIcon = this.querySelector('.fas');
-            if (sidebar.classList.contains('collapsed')) {
-                toggleBtnIcon.classList.remove('fa-chevron-left');
-                toggleBtnIcon.classList.add('fa-chevron-right');
-            } else {
-                toggleBtnIcon.classList.remove('fa-chevron-right');
-                toggleBtnIcon.classList.add('fa-chevron-left');
-            }
+        document.getElementById('menu-clients').addEventListener('click', (e) => {
+            e.preventDefault();
+            showView('clients-view', 'menu-clients');
+            renderClientsTable(); // NEW: Call the function to render the table content
         });
+
+        document.getElementById('menu-reports').addEventListener('click', (e) => {
+            e.preventDefault();
+            showView('reports-view', 'menu-reports');
+        });
+        // --- END: New View Switching Logic ---
     });
 </script>
 
