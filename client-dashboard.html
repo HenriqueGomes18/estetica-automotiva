@@ -82,31 +82,131 @@
 <body class="gradient-bg text-white font-sans leading-relaxed min-h-screen">
     <div class="container mx-auto p-4 md:p-8">
 
-        <header class="flex flex-col md:flex-row justify-between items-center mb-12">
+        <header class="flex flex-col md:flex-row justify-between items-center mb-8">
             <div class="flex items-center space-x-4 mb-4 md:mb-0">
                 <img src="https://as2.ftcdn.net/jpg/01/98/91/55/1000_F_198915596_vZ4UkQO8ppJupDOYrFLKivEJl4XD7ult.jpg" alt="Ícone de carro" class="w-12 h-12">
                 <h1 class="text-3xl font-bold">L'Brothers</h1>
             </div>
             <nav class="flex items-center space-x-4">
-                <p id="welcome-message" class="text-white text-lg font-semibold">Painel do Cliente</p>
-                <a href="index.html" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700 hover:shadow-lg">
-                    Página Inicial
+                <a href="loja.html" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700">
+                    <i class="fas fa-shopping-bag mr-2"></i>Loja
+                </a>
+                <a href="index.html" class="px-6 py-3 bg-gray-700 text-white font-bold rounded-full transition-all duration-300 hover:bg-gray-600">
+                    <i class="fas fa-home mr-2"></i>Página Inicial
                 </a>
             </nav>
         </header>
 
+        <!-- Barra de boas-vindas com nome do usuário e logout -->
+        <div class="bg-purple-600 rounded-xl p-4 mb-8 flex flex-col md:flex-row justify-between items-center shadow-lg">
+            <div class="flex items-center space-x-3 mb-3 md:mb-0">
+                <i class="fas fa-user-circle text-3xl"></i>
+                <div>
+                    <p class="text-sm text-purple-200">Bem-vindo(a) de volta!</p>
+                    <p id="user-name-display" class="text-xl font-bold">Carregando...</p>
+                </div>
+            </div>
+            <button id="logout-btn" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full transition-all duration-300 flex items-center space-x-2">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sair</span>
+            </button>
+        </div>
+
+        <!-- Tabs de navegação -->
+        <div class="flex justify-center space-x-4 mb-8 flex-wrap gap-2">
+            <button id="appointments-tab" class="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg transition-all duration-300">
+                <i class="fas fa-calendar-check mr-2"></i>Agendamentos
+            </button>
+            <button id="history-tab" class="px-6 py-3 bg-gray-700 text-white font-semibold rounded-lg hover:bg-gray-600 transition-all duration-300">
+                <i class="fas fa-history mr-2"></i>Histórico de Compras
+            </button>
+            <button id="settings-tab" class="px-6 py-3 bg-gray-700 text-white font-semibold rounded-lg hover:bg-gray-600 transition-all duration-300">
+                <i class="fas fa-cog mr-2"></i>Configurações
+            </button>
+        </div>
+
         <main class="py-8">
             <div class="flex flex-col items-center">
-                <div class="bg-gray-900 p-8 rounded-xl shadow-xl w-full max-w-4xl">
+                <!-- Appointments View -->
+                <div id="appointments-view" class="bg-gray-900 p-8 rounded-xl shadow-xl w-full max-w-4xl">
                     <h2 class="text-3xl font-bold text-center mb-6 text-purple-400">Seus Agendamentos</h2>
                     
                     <div id="dashboard-container" class="flex flex-col items-center space-y-4">
-                        </div>
+                    </div>
 
                     <div class="text-center mt-8">
                         <button id="new-appointment-btn" class="px-8 py-4 bg-purple-600 text-white font-bold text-lg rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-purple-700">
-                            Novo Agendamento
+                            <i class="fas fa-plus mr-2"></i>Novo Agendamento
                         </button>
+                    </div>
+                </div>
+
+                <!-- Purchase History View -->
+                <div id="history-view" class="bg-gray-900 p-8 rounded-xl shadow-xl w-full max-w-4xl hidden">
+                    <h2 class="text-3xl font-bold text-center mb-6 text-purple-400">Histórico de Compras</h2>
+                    
+                    <div id="history-container" class="flex flex-col items-center space-y-4">
+                    </div>
+                </div>
+
+                <!-- Settings View -->
+                <div id="settings-view" class="bg-gray-900 p-8 rounded-xl shadow-xl w-full max-w-4xl hidden">
+                    <h2 class="text-3xl font-bold text-center mb-6 text-purple-400">Configurações</h2>
+                    
+                    <!-- Foto de Perfil -->
+                    <div class="bg-gray-800 p-6 rounded-xl mb-6">
+                        <h3 class="text-xl font-bold mb-4 text-purple-300">Foto de Perfil</h3>
+                        <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+                            <img id="profile-picture-preview" src="https://ui-avatars.com/api/?name=User&size=128&background=9333ea&color=fff" alt="Foto de perfil" class="w-32 h-32 rounded-full object-cover border-4 border-purple-500">
+                            <div class="flex-grow">
+                                <label class="block text-sm text-gray-400 mb-2">URL da Imagem</label>
+                                <input type="url" id="profile-picture-input" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white" placeholder="https://exemplo.com/foto.jpg">
+                                <button id="update-picture-btn" class="mt-3 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg transition-all">
+                                    <i class="fas fa-camera mr-2"></i>Atualizar Foto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informações de Contato -->
+                    <div class="bg-gray-800 p-6 rounded-xl mb-6">
+                        <h3 class="text-xl font-bold mb-4 text-purple-300">Informações de Contato</h3>
+                        <form id="contact-info-form">
+                            <div class="mb-4">
+                                <label class="block text-sm text-gray-400 mb-2">Nome Completo</label>
+                                <input type="text" id="settings-name" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm text-gray-400 mb-2">E-mail</label>
+                                <input type="email" id="settings-email" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm text-gray-400 mb-2">Telefone</label>
+                                <input type="tel" id="settings-phone" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm text-gray-400 mb-2">Endereço</label>
+                                <input type="text" id="settings-address" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white" placeholder="Rua, número, bairro, cidade">
+                            </div>
+                            <button type="submit" class="w-full px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg transition-all">
+                                <i class="fas fa-save mr-2"></i>Salvar Alterações
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Aparência -->
+                    <div class="bg-gray-800 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold mb-4 text-purple-300">Aparência</h3>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-semibold">Modo Escuro</p>
+                                <p class="text-sm text-gray-400">Alternar entre modo claro e escuro</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="dark-mode-toggle" class="sr-only peer" checked>
+                                <div class="w-14 h-7 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-purple-600"></div>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -166,7 +266,35 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Verificar se usuário está logado
+            const loggedUser = JSON.parse(sessionStorage.getItem('lbrothers_logged_user'));
+            
+            if (!loggedUser) {
+                alert('Você precisa fazer login para acessar esta página!');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Exibir nome do usuário
+            document.getElementById('user-name-display').textContent = loggedUser.name;
+
+            // Botão de logout
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                if (confirm('Tem certeza que deseja sair?')) {
+                    sessionStorage.removeItem('lbrothers_logged_user');
+                    alert('Logout realizado com sucesso!');
+                    window.location.href = 'index.html';
+                }
+            });
+
             const dashboardContainer = document.getElementById('dashboard-container');
+            const historyContainer = document.getElementById('history-container');
+            const appointmentsView = document.getElementById('appointments-view');
+            const historyView = document.getElementById('history-view');
+            const settingsView = document.getElementById('settings-view');
+            const appointmentsTab = document.getElementById('appointments-tab');
+            const historyTab = document.getElementById('history-tab');
+            const settingsTab = document.getElementById('settings-tab');
             const newAppointmentBtn = document.getElementById('new-appointment-btn');
             const appointmentModal = document.getElementById('appointment-modal');
             const closeAppointmentModalBtn = document.getElementById('close-appointment-modal');
@@ -175,10 +303,259 @@
             const closeSuccessModalBtn = document.getElementById('close-success-modal');
             const timeSelect = document.getElementById('time-select');
 
-            // Array para armazenar os agendamentos (simulado)
             let appointments = [];
 
-            // Função para gerar as opções de horário
+            // Carregar configurações do usuário
+            const loadUserSettings = () => {
+                const users = JSON.parse(localStorage.getItem('lbrothers_users') || '[]');
+                const currentUser = users.find(u => u.email === loggedUser.email);
+                
+                if (currentUser) {
+                    document.getElementById('settings-name').value = currentUser.name || '';
+                    document.getElementById('settings-email').value = currentUser.email || '';
+                    document.getElementById('settings-phone').value = currentUser.phone || '';
+                    document.getElementById('settings-address').value = currentUser.address || '';
+                    
+                    // Carregar foto de perfil
+                    if (currentUser.profilePicture) {
+                        document.getElementById('profile-picture-preview').src = currentUser.profilePicture;
+                        document.getElementById('profile-picture-input').value = currentUser.profilePicture;
+                    }
+                    
+                    // Carregar preferência de modo escuro
+                    const darkMode = localStorage.getItem('lbrothers_dark_mode');
+                    if (darkMode === 'false') {
+                        document.getElementById('dark-mode-toggle').checked = false;
+                        toggleLightMode();
+                    }
+                }
+            };
+
+            // Atualizar foto de perfil
+            document.getElementById('update-picture-btn').addEventListener('click', () => {
+                const pictureUrl = document.getElementById('profile-picture-input').value.trim();
+                
+                if (pictureUrl) {
+                    // Testar se a URL é válida
+                    const img = new Image();
+                    img.onload = () => {
+                        document.getElementById('profile-picture-preview').src = pictureUrl;
+                        
+                        // Salvar no localStorage
+                        const users = JSON.parse(localStorage.getItem('lbrothers_users') || '[]');
+                        const userIndex = users.findIndex(u => u.email === loggedUser.email);
+                        if (userIndex !== -1) {
+                            users[userIndex].profilePicture = pictureUrl;
+                            localStorage.setItem('lbrothers_users', JSON.stringify(users));
+                            
+                            // Atualizar sessão
+                            loggedUser.profilePicture = pictureUrl;
+                            sessionStorage.setItem('lbrothers_logged_user', JSON.stringify(loggedUser));
+                            
+                            alert('Foto de perfil atualizada com sucesso!');
+                        }
+                    };
+                    img.onerror = () => {
+                        alert('URL de imagem inválida. Por favor, insira uma URL válida.');
+                    };
+                    img.src = pictureUrl;
+                } else {
+                    alert('Por favor, insira uma URL de imagem.');
+                }
+            });
+
+            // Salvar informações de contato
+            document.getElementById('contact-info-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('settings-name').value.trim();
+                const email = document.getElementById('settings-email').value.trim();
+                const phone = document.getElementById('settings-phone').value.trim();
+                const address = document.getElementById('settings-address').value.trim();
+                
+                // Verificar se o email mudou e se já existe
+                const users = JSON.parse(localStorage.getItem('lbrothers_users') || '[]');
+                const emailExists = users.some(u => u.email === email && u.email !== loggedUser.email);
+                
+                if (emailExists) {
+                    alert('Este e-mail já está sendo usado por outro usuário!');
+                    return;
+                }
+                
+                // Atualizar usuário
+                const userIndex = users.findIndex(u => u.email === loggedUser.email);
+                if (userIndex !== -1) {
+                    users[userIndex].name = name;
+                    users[userIndex].email = email;
+                    users[userIndex].phone = phone;
+                    users[userIndex].address = address;
+                    
+                    localStorage.setItem('lbrothers_users', JSON.stringify(users));
+                    
+                    // Atualizar sessão
+                    loggedUser.name = name;
+                    loggedUser.email = email;
+                    loggedUser.phone = phone;
+                    loggedUser.address = address;
+                    sessionStorage.setItem('lbrothers_logged_user', JSON.stringify(loggedUser));
+                    
+                    // Atualizar nome exibido
+                    document.getElementById('user-name-display').textContent = name;
+                    
+                    alert('Informações atualizadas com sucesso!');
+                }
+            });
+
+            // Toggle modo escuro/claro
+            const toggleLightMode = () => {
+                document.body.classList.toggle('light-mode');
+                const isLightMode = document.body.classList.contains('light-mode');
+                
+                if (isLightMode) {
+                    document.body.style.background = 'linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%)';
+                    document.querySelectorAll('.gradient-bg, .bg-gray-900, .bg-gray-800, .bg-gray-700').forEach(el => {
+                        el.style.backgroundColor = '#ffffff';
+                        el.style.color = '#1f2937';
+                    });
+                } else {
+                    document.body.style.background = '';
+                    document.querySelectorAll('.gradient-bg, .bg-gray-900, .bg-gray-800, .bg-gray-700').forEach(el => {
+                        el.style.backgroundColor = '';
+                        el.style.color = '';
+                    });
+                }
+                
+                localStorage.setItem('lbrothers_dark_mode', !isLightMode);
+            };
+
+            document.getElementById('dark-mode-toggle').addEventListener('change', (e) => {
+                toggleLightMode();
+            });
+
+            // Tab switching logic
+            appointmentsTab.addEventListener('click', () => {
+                appointmentsView.classList.remove('hidden');
+                historyView.classList.add('hidden');
+                settingsView.classList.add('hidden');
+                appointmentsTab.classList.remove('bg-gray-700', 'hover:bg-gray-600');
+                appointmentsTab.classList.add('bg-purple-600');
+                historyTab.classList.remove('bg-purple-600');
+                historyTab.classList.add('bg-gray-700', 'hover:bg-gray-600');
+                settingsTab.classList.remove('bg-purple-600');
+                settingsTab.classList.add('bg-gray-700', 'hover:bg-gray-600');
+            });
+
+            historyTab.addEventListener('click', () => {
+                historyView.classList.remove('hidden');
+                appointmentsView.classList.add('hidden');
+                settingsView.classList.add('hidden');
+                historyTab.classList.remove('bg-gray-700', 'hover:bg-gray-600');
+                historyTab.classList.add('bg-purple-600');
+                appointmentsTab.classList.remove('bg-purple-600');
+                appointmentsTab.classList.add('bg-gray-700', 'hover:bg-gray-600');
+                settingsTab.classList.remove('bg-purple-600');
+                settingsTab.classList.add('bg-gray-700', 'hover:bg-gray-600');
+                renderPurchaseHistory();
+            });
+
+            settingsTab.addEventListener('click', () => {
+                settingsView.classList.remove('hidden');
+                appointmentsView.classList.add('hidden');
+                historyView.classList.add('hidden');
+                settingsTab.classList.remove('bg-gray-700', 'hover:bg-gray-600');
+                settingsTab.classList.add('bg-purple-600');
+                appointmentsTab.classList.remove('bg-purple-600');
+                appointmentsTab.classList.add('bg-gray-700', 'hover:bg-gray-600');
+                historyTab.classList.remove('bg-purple-600');
+                historyTab.classList.add('bg-gray-700', 'hover:bg-gray-600');
+                loadUserSettings();
+            });
+
+            const renderPurchaseHistory = () => {
+                // Buscar histórico específico do usuário logado
+                const allPurchases = JSON.parse(localStorage.getItem('lbrothers_purchases') || '{}');
+                const userPurchases = allPurchases[loggedUser.email] || [];
+                
+                historyContainer.innerHTML = '';
+                
+                if (userPurchases.length > 0) {
+                    const historyHtml = userPurchases.map((purchase, index) => `
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-full">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-purple-400 mb-2">Pedido #${purchase.id}</h3>
+                                    <p class="text-sm text-gray-400">Data: ${purchase.date}</p>
+                                    <p class="text-sm text-gray-400">Pagamento: ${purchase.paymentMethod}</p>
+                                    <p class="text-sm text-gray-400">Entrega: ${purchase.deliveryType}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-2xl font-bold text-green-400">R$ ${purchase.total.toFixed(2).replace('.', ',')}</p>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-700 pt-4 mb-4">
+                                <h4 class="text-md font-semibold mb-2">Itens:</h4>
+                                <ul class="space-y-2">
+                                    ${purchase.items.map(item => `
+                                        <li class="flex justify-between text-sm">
+                                            <span>${item.name} (${item.quantity}x)</span>
+                                            <span class="text-purple-300">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                            <button class="repurchase-btn w-full px-6 py-2 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700" data-index="${index}">
+                                <i class="fas fa-shopping-cart mr-2"></i>Recomprar Pedido
+                            </button>
+                        </div>
+                    `).join('');
+                    historyContainer.innerHTML = historyHtml;
+                    setupRepurchaseButtons();
+                } else {
+                    historyContainer.innerHTML = `
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg text-center w-full">
+                            <i class="fas fa-receipt text-5xl text-gray-600 mb-4"></i>
+                            <p class="text-xl font-semibold text-gray-400">Nenhuma compra realizada ainda.</p>
+                            <p class="text-gray-500 mt-2">Visite nossa loja para fazer seu primeiro pedido!</p>
+                            <a href="loja.html" class="inline-block mt-4 px-6 py-3 bg-purple-600 text-white font-bold rounded-full hover:bg-purple-700">
+                                Ir para a Loja
+                            </a>
+                        </div>
+                    `;
+                }
+            };
+
+            const setupRepurchaseButtons = () => {
+                const repurchaseBtns = document.querySelectorAll('.repurchase-btn');
+                repurchaseBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = e.target.closest('.repurchase-btn').getAttribute('data-index');
+                        repurchaseOrder(index);
+                    });
+                });
+            };
+
+            const repurchaseOrder = (index) => {
+                const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory') || '[]');
+                const purchase = purchaseHistory[index];
+                
+                if (purchase) {
+                    let currentCart = JSON.parse(localStorage.getItem('cart') || '[]');
+                    
+                    purchase.items.forEach(item => {
+                        const existingItem = currentCart.find(cartItem => cartItem.name === item.name);
+                        if (existingItem) {
+                            existingItem.quantity += item.quantity;
+                        } else {
+                            currentCart.push({...item});
+                        }
+                    });
+                    
+                    localStorage.setItem('cart', JSON.stringify(currentCart));
+                    alert('Itens adicionados ao carrinho! Redirecionando para a loja...');
+                    window.location.href = 'loja.html';
+                }
+            };
+
             const generateTimeOptions = () => {
                 const startHour = 8;
                 const endHour = 17;
@@ -191,7 +568,6 @@
                 }
             };
 
-            // Função para renderizar os agendamentos
             const renderAppointments = (currentAppointments) => {
                 dashboardContainer.innerHTML = '';
                 if (currentAppointments && currentAppointments.length > 0) {
@@ -217,7 +593,7 @@
                     const noAppointmentMessageHtml = `
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg text-center w-full mb-6">
                             <div class="text-center mb-6">
-                                <img src="https://th.bing.com/th/id/R.86d33adb05b3b385486f4709b783bdad?rik=Yr2x0gmkkuSF1w&pid=ImgRaw&r=0" alt="Ícone de calendário" class="w-16 h-16 mx-auto mb-4 opacity-70">
+                                <i class="fas fa-calendar-times text-5xl text-gray-600 mb-4"></i>
                                 <p class="text-xl font-semibold text-gray-400">Nenhum agendamento encontrado.</p>
                                 <p class="text-gray-500 mt-2">Parece que você ainda não agendou nenhum serviço.</p>
                             </div>
@@ -227,7 +603,6 @@
                 }
             };
             
-            // Função para configurar os event listeners dos botões de cancelar
             const setupCancelButtons = () => {
                 const cancelBtns = document.querySelectorAll('.cancel-btn');
                 cancelBtns.forEach(btn => {
@@ -240,29 +615,24 @@
                 });
             };
 
-            // Função para deletar o agendamento
             const deleteAppointment = (index) => {
                 appointments.splice(index, 1);
                 renderAppointments(appointments);
             };
 
-            // Event listener para o botão "Novo Agendamento"
             newAppointmentBtn.addEventListener('click', () => {
                 appointmentModal.classList.add('flex');
             });
 
-            // Event listener para fechar o modal de agendamento
             closeAppointmentModalBtn.addEventListener('click', () => {
                 appointmentModal.classList.remove('flex');
                 appointmentForm.reset();
             });
 
-            // Event listener para fechar o modal de sucesso
             closeSuccessModalBtn.addEventListener('click', () => {
                 successModal.classList.remove('flex');
             });
 
-            // Event listener para o envio do formulário de agendamento
             appointmentForm.addEventListener('submit', (e) => {
                 e.preventDefault();
 
@@ -271,30 +641,21 @@
                 const date = document.getElementById('date-input').value;
                 const time = document.getElementById('time-select').value;
 
-                // Cria um novo agendamento
                 const newAppointment = {
                     service: service,
                     carModel: carModel,
                     date: date,
                     time: time,
-                    status: 'Pendente' // Novo agendamento começa como pendente
+                    status: 'Pendente'
                 };
 
-                // Adiciona o novo agendamento ao array
                 appointments.push(newAppointment);
-
-                // Re-renderiza a lista de agendamentos
                 renderAppointments(appointments);
-
-                // Fecha o modal de agendamento
                 appointmentModal.classList.remove('flex');
                 appointmentForm.reset();
-
-                // Exibe o modal de sucesso
                 successModal.classList.add('flex');
             });
 
-            // Fecha modais clicando fora deles
             window.addEventListener('click', (event) => {
                 if (event.target === appointmentModal) {
                     appointmentModal.classList.remove('flex');
@@ -305,10 +666,7 @@
                 }
             });
 
-            // Gera as opções de horário ao carregar a página
             generateTimeOptions();
-
-            // Renderiza os agendamentos iniciais
             renderAppointments(appointments);
         });
     </script>
