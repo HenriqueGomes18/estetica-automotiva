@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .gradient-bg {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 1e00%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         }
         .modal {
             display: none;
@@ -30,6 +30,8 @@
             border-radius: 12px;
             width: 90%;
             max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             position: relative;
         }
@@ -54,8 +56,8 @@
                 <a href="loja.html" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700 hover:shadow-lg">
                     Loja
                 </a>
-                <a href="index.html" class="px-6 py-3 bg-gray-700 text-white font-bold rounded-full transition-all duration-300 hover:bg-gray-800 hover:shadow-lg">
-                    Login
+                <a href="client-dashboard.html" class="px-6 py-3 bg-gray-700 text-white font-bold rounded-full transition-all duration-300 hover:bg-gray-800 hover:shadow-lg">
+                    Minha Conta
                 </a>
                 <div class="relative cursor-pointer" id="cart-icon">
                     <i class="fas fa-shopping-cart text-white text-3xl"></i>
@@ -119,7 +121,7 @@
                             <i class="fas fa-broom text-5xl text-purple-400 mb-4"></i>
                             <h3 class="text-xl font-semibold mb-2">Limpa Interior Multiuso</h3>
                             <p class="text-sm text-gray-400 mb-4">Limpeza segura e eficaz para painéis, bancos e partes plásticas.</p>
-                            <p class="class="text-md font-bold text-purple-300 mb-4">R$ 67,50</p>
+                            <p class="text-md font-bold text-purple-300 mb-4">R$ 67,50</p>
                             <button class="add-to-cart-btn px-6 py-2 bg-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-purple-700"
                                 data-product-name="Limpa Interior Multiuso (Couro & Plástico)" data-product-price="67.50">
                                 Comprar
@@ -161,18 +163,6 @@
 
                     </div>
 
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md mx-auto mt-12">
-                        <h3 class="text-2xl font-bold text-purple-400 mb-4">Calcular Frete</h3>
-                        <div class="flex flex-col md:flex-row gap-4">
-                            <input type="text" id="cep-input" placeholder="Digite seu CEP (ddddd-ddd)" class="flex-grow p-3 bg-gray-700 text-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500" maxlength="9">
-                            <button id="calculate-shipping-btn" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-lg transition-all duration-300 hover:bg-purple-700">
-                                Calcular
-                            </button>
-                        </div>
-                        <div id="shipping-result" class="text-center mt-4 text-lg font-semibold">
-                            </div>
-                    </div>
-
                 </div>
             </div>
         </main>
@@ -188,12 +178,28 @@
                 <h3 class="text-2xl font-bold">Seu Carrinho</h3>
                 <span class="close-btn text-gray-400 text-3xl font-bold cursor-pointer hover:text-white">&times;</span>
             </div>
-            <ul id="cart-items" class="border-t border-b border-gray-700 py-4 max-h-72 overflow-y-auto">
-                </ul>
+            <ul id="cart-items" class="border-t border-b border-gray-700 py-4 max-h-72 overflow-y-auto"></ul>
             
             <div id="address-section" class="mt-6">
-                <h4 class="text-xl font-semibold mb-4">Endereço de Entrega</h4>
-                <form class="space-y-4">
+                <h4 class="text-xl font-semibold mb-4">Opção de Entrega</h4>
+                <div class="space-y-4 mb-6">
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="radio" name="delivery-option" value="home" id="home-delivery" checked class="w-4 h-4 text-purple-600">
+                        <span class="text-gray-300">Entrega em Casa</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="radio" name="delivery-option" value="pickup" id="store-pickup" class="w-4 h-4 text-purple-600">
+                        <span class="text-gray-300">Retirar na Loja</span>
+                    </label>
+                </div>
+                
+                <div id="store-address-info" class="hidden bg-gray-700 p-4 rounded-lg mb-4">
+                    <p class="text-sm text-gray-300"><i class="fas fa-map-marker-alt mr-2 text-purple-400"></i><strong>Endereço da Loja:</strong></p>
+                    <p class="text-sm text-gray-400 mt-1">R. Floriano Miranda, 68 - São Paulo/SP</p>
+                    <p class="text-sm text-green-400 mt-2"><i class="fas fa-check-circle mr-2"></i>Frete Grátis para retirada na loja!</p>
+                </div>
+
+                <form id="delivery-form" class="space-y-4">
                     <div>
                         <label for="address-cep" class="block text-sm font-medium text-gray-400">CEP</label>
                         <input type="text" id="address-cep" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="00000-000">
@@ -233,6 +239,10 @@
                         <span>Desconto Pix (5%):</span>
                         <span id="discount-amount" class="text-green-400">R$ 0,00</span>
                     </div>
+                    <div class="flex justify-between" id="interest-display" style="display: none;">
+                        <span>Juros Cartão:</span>
+                        <span id="interest-amount" class="text-red-400">R$ 0,00</span>
+                    </div>
                 </div>
                 <div class="text-right font-bold text-xl mt-4 border-t border-gray-700 pt-4">
                     Total: <span id="cart-total">R$ 0,00</span>
@@ -268,6 +278,17 @@
                                 <input type="text" id="card-cvv" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="123">
                             </div>
                         </div>
+                        <div>
+                            <label for="installments" class="block text-sm font-medium text-gray-400 mb-2">Parcelamento</label>
+                            <select id="installments" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-300">
+                                <option value="1">1x sem juros</option>
+                                <option value="2">2x com juros (2%)</option>
+                                <option value="3">3x com juros (3%)</option>
+                                <option value="4">4x com juros (4%)</option>
+                                <option value="5">5x com juros (5%)</option>
+                                <option value="6">6x com juros (6%)</option>
+                            </select>
+                        </div>
                     </form>
                     <button id="pay-with-card-btn" class="w-full mt-6 py-3 bg-green-600 text-white font-bold rounded-full transition-all duration-300 hover:bg-green-700">
                         Pagar com Cartão
@@ -297,34 +318,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const calculateShippingBtn = document.getElementById('calculate-shipping-btn');
-            const cepInput = document.getElementById('cep-input');
-            const shippingResult = document.getElementById('shipping-result');
-
-            // Lógica de cálculo de frete
-            cepInput.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, ''); 
-                let formattedValue = '';
-                if (value.length > 5) {
-                    formattedValue = `${value.substring(0, 5)}-${value.substring(5, 8)}`;
-                } else {
-                    formattedValue = value;
-                }
-                e.target.value = formattedValue;
-            });
-            calculateShippingBtn.addEventListener('click', () => {
-                const cep = cepInput.value.replace(/\D/g, '');
-                if (cep.length === 8) {
-                    shippingResult.textContent = "Frete: R$ 20,00";
-                    shippingResult.className = `text-center mt-4 text-lg font-semibold text-green-500`;
-                } else {
-                    shippingResult.textContent = "Por favor, digite um CEP válido.";
-                    shippingResult.classList.remove('text-green-500', 'text-yellow-500');
-                    shippingResult.classList.add('text-red-500');
-                }
-            });
-
-            // Lógica do Carrinho de Compras
             const cartIcon = document.getElementById('cart-icon');
             const cartModal = document.getElementById('cart-modal');
             const closeBtn = cartModal.querySelector('.close-btn');
@@ -334,32 +327,80 @@
             const shippingAmountEl = document.getElementById('shipping-amount');
             const cartTotalEl = document.getElementById('cart-total');
             const cartCounter = document.getElementById('cart-counter');
-
-            // Seções do modal
             const addressSection = document.getElementById('address-section');
             const confirmAddressBtn = document.getElementById('confirm-address-btn');
             const paymentSection = document.getElementById('payment-section');
             const discountDisplay = document.getElementById('discount-display');
             const discountAmountEl = document.getElementById('discount-amount');
-            
-            // Botões e seções de pagamento
+            const interestDisplay = document.getElementById('interest-display');
+            const interestAmountEl = document.getElementById('interest-amount');
             const creditCardBtn = document.getElementById('credit-card-btn');
             const pixBtn = document.getElementById('pix-btn');
             const creditCardForm = document.getElementById('credit-card-form');
             const pixSection = document.getElementById('pix-section');
             const payWithCardBtn = document.getElementById('pay-with-card-btn');
             const payWithPixBtn = document.getElementById('pay-with-pix-btn');
-            
             const successModal = document.getElementById('success-modal');
             const successModalCloseBtn = document.getElementById('success-modal-close-btn');
+            const homeDeliveryRadio = document.getElementById('home-delivery');
+            const storePickupRadio = document.getElementById('store-pickup');
+            const storeAddressInfo = document.getElementById('store-address-info');
+            const deliveryForm = document.getElementById('delivery-form');
+            const installmentsSelect = document.getElementById('installments');
 
             const SHIPPING_COST = 20.00;
             const PIX_DISCOUNT_PERCENTAGE = 0.05;
+            const STORE_LAT = -23.597148;
+            const STORE_LNG = -46.689656;
             let currentShippingCost = SHIPPING_COST;
+            let currentInstallments = 1;
+            let isStorePickup = false;
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            let currentPaymentMethod = '';
+            let checkoutStep = 'address';
 
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let currentPaymentMethod = ''; // 'credit-card' or 'pix'
-            let checkoutStep = 'address'; // 'address' or 'payment'
+            function calculateDistance(lat1, lon1, lat2, lon2) {
+                const R = 6371;
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                          Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                return R * c;
+            }
+
+            async function calculateShippingByDistance(cep) {
+                try {
+                    const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                    const data = await response.json();
+                    
+                    if (data.erro) {
+                        return SHIPPING_COST;
+                    }
+
+                    const address = `${data.logradouro}, ${data.bairro}, ${data.localidade}, ${data.uf}, Brazil`;
+                    const geoResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+                    const geoData = await geoResponse.json();
+
+                    if (geoData.length > 0) {
+                        const customerLat = parseFloat(geoData[0].lat);
+                        const customerLng = parseFloat(geoData[0].lon);
+                        const distance = calculateDistance(STORE_LAT, STORE_LNG, customerLat, customerLng);
+                        
+                        if (distance <= 10) {
+                            return 0;
+                        } else {
+                            const additionalKm = distance - 10;
+                            return 5.00 + (additionalKm * 0.50);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error calculating shipping:', error);
+                }
+                
+                return SHIPPING_COST;
+            }
 
             function saveCart() {
                 localStorage.setItem('cart', JSON.stringify(cart));
@@ -368,6 +409,7 @@
             function updatePaymentView() {
                 const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 let finalTotal = subtotal + currentShippingCost;
+                let interestAmount = 0;
 
                 subtotalAmountEl.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
                 shippingAmountEl.textContent = `R$ ${currentShippingCost.toFixed(2).replace('.', ',')}`;
@@ -377,8 +419,19 @@
                     finalTotal = finalTotal - discount;
                     discountDisplay.style.display = 'flex';
                     discountAmountEl.textContent = `R$ ${discount.toFixed(2).replace('.', ',')}`;
-                } else {
+                    interestDisplay.style.display = 'none';
+                } 
+                else if (currentPaymentMethod === 'credit-card' && currentInstallments > 1) {
+                    const interestRate = currentInstallments / 100;
+                    interestAmount = subtotal * interestRate;
+                    finalTotal = finalTotal + interestAmount;
+                    interestDisplay.style.display = 'flex';
+                    interestAmountEl.textContent = `R$ ${interestAmount.toFixed(2).replace('.', ',')}`;
                     discountDisplay.style.display = 'none';
+                } 
+                else {
+                    discountDisplay.style.display = 'none';
+                    interestDisplay.style.display = 'none';
                 }
                 
                 cartTotalEl.textContent = `R$ ${finalTotal.toFixed(2).replace('.', ',')}`;
@@ -431,7 +484,6 @@
                 cartCounter.textContent = totalItems;
                 updatePaymentView();
 
-                // Adicionar event listeners aos botões de controle após renderizar
                 document.querySelectorAll('.add-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const index = e.currentTarget.dataset.index;
@@ -453,7 +505,7 @@
                         saveCart();
                         renderCart();
                         updatePaymentView();
-                        updateModalView(); // Para verificar se o carrinho ficou vazio
+                        updateModalView();
                     });
                 });
 
@@ -464,30 +516,77 @@
                         saveCart();
                         renderCart();
                         updatePaymentView();
-                        updateModalView(); // Para verificar se o carrinho ficou vazio
+                        updateModalView();
                     });
                 });
             }
             
-            // Lógica para simular a finalização da compra
             function handleCheckout() {
-                cart = []; // Limpa o carrinho
-                saveCart(); // Salva o estado vazio
-                cartModal.style.display = 'none'; // Fecha o modal do carrinho
-                successModal.style.display = 'flex'; // Abre o modal de sucesso
-                checkoutStep = 'address'; // Reseta o passo do checkout
-                renderCart(); // Renderiza o carrinho vazio
-                updateModalView(); // Garante que a próxima abertura do modal comece do zero
+                // Pegar usuário logado
+                const loggedUser = JSON.parse(sessionStorage.getItem('lbrothers_logged_user'));
+                
+                if (!loggedUser) {
+                    alert('Você precisa estar logado para finalizar a compra!');
+                    return;
+                }
+
+                // Buscar histórico organizado por usuário
+                const allPurchases = JSON.parse(localStorage.getItem('lbrothers_purchases') || '{}');
+                
+                // Inicializar array do usuário se não existir
+                if (!allPurchases[loggedUser.email]) {
+                    allPurchases[loggedUser.email] = [];
+                }
+                
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                let finalTotal = subtotal + currentShippingCost;
+                
+                if (currentPaymentMethod === 'pix' && subtotal > 0) {
+                    const discount = subtotal * PIX_DISCOUNT_PERCENTAGE;
+                    finalTotal = finalTotal - discount;
+                } else if (currentPaymentMethod === 'credit-card' && currentInstallments > 1) {
+                    const interestRate = currentInstallments / 100;
+                    const interestAmount = subtotal * interestRate;
+                    finalTotal = finalTotal + interestAmount;
+                }
+                
+                const newPurchase = {
+                    id: Date.now(),
+                    date: new Date().toLocaleDateString('pt-BR'),
+                    items: [...cart],
+                    total: finalTotal,
+                    paymentMethod: currentPaymentMethod === 'pix' ? 'Pix' : `Cartão de Crédito (${currentInstallments}x)`,
+                    deliveryType: isStorePickup ? 'Retirar na Loja' : 'Entrega em Casa',
+                    shippingCost: currentShippingCost
+                };
+                
+                // Adicionar compra ao histórico do usuário específico
+                allPurchases[loggedUser.email].push(newPurchase);
+                
+                // Salvar tudo de volta
+                localStorage.setItem('lbrothers_purchases', JSON.stringify(allPurchases));
+                
+                cart = [];
+                saveCart();
+                cartModal.style.display = 'none';
+                successModal.style.display = 'flex';
+                checkoutStep = 'address';
+                renderCart();
+                updateModalView();
             }
 
-            // Abre o modal do carrinho
             cartIcon.addEventListener('click', () => {
+                const loggedUser = JSON.parse(sessionStorage.getItem('lbrothers_logged_user'));
+                if (!loggedUser) {
+                    alert('Por favor, faça login para acessar o carrinho.');
+                    window.location.href = 'index.html';
+                    return;
+                }
                 cartModal.style.display = 'flex';
                 renderCart();
                 updateModalView();
             });
 
-            // Fecha o modal do carrinho
             closeBtn.addEventListener('click', () => {
                 cartModal.style.display = 'none';
                 creditCardForm.classList.add('hidden');
@@ -497,7 +596,6 @@
                 checkoutStep = 'address';
             });
             
-            // Fecha o modal se clicar fora da área de conteúdo
             window.addEventListener('click', (event) => {
                 if (event.target === cartModal) {
                     cartModal.style.display = 'none';
@@ -512,7 +610,6 @@
                 }
             });
 
-            // Adiciona um item ao carrinho
             addToCartBtns.forEach(button => {
                 button.addEventListener('click', (event) => {
                     const productName = event.target.dataset.productName;
@@ -530,23 +627,59 @@
                 });
             });
 
-            // Lógica do botão de confirmar endereço
-            confirmAddressBtn.addEventListener('click', () => {
-                const cep = document.getElementById('address-cep').value;
+            homeDeliveryRadio.addEventListener('change', () => {
+                isStorePickup = false;
+                storeAddressInfo.classList.add('hidden');
+                deliveryForm.classList.remove('hidden');
+                Array.from(deliveryForm.elements).forEach(el => el.disabled = false);
+                currentShippingCost = SHIPPING_COST;
+                updatePaymentView();
+            });
+
+            storePickupRadio.addEventListener('change', () => {
+                isStorePickup = true;
+                storeAddressInfo.classList.remove('hidden');
+                deliveryForm.classList.add('hidden');
+                Array.from(deliveryForm.elements).forEach(el => el.disabled = true);
+                currentShippingCost = 0;
+                updatePaymentView();
+            });
+
+            installmentsSelect.addEventListener('change', (e) => {
+                currentInstallments = parseInt(e.target.value);
+                updatePaymentView();
+            });
+
+            confirmAddressBtn.addEventListener('click', async () => {
+                if (isStorePickup) {
+                    checkoutStep = 'payment';
+                    updateModalView();
+                    return;
+                }
+                
+                const cep = document.getElementById('address-cep').value.replace(/\D/g, '');
                 const street = document.getElementById('address-street').value;
                 const number = document.getElementById('address-number').value;
 
                 if (cep.trim() === '' || street.trim() === '' || number.trim() === '') {
                     alert('Por favor, preencha todos os campos obrigatórios (CEP, Rua e Número) para continuar.');
                 } else {
+                    confirmAddressBtn.textContent = 'Calculando frete...';
+                    confirmAddressBtn.disabled = true;
+                    
+                    currentShippingCost = await calculateShippingByDistance(cep);
+                    
+                    confirmAddressBtn.textContent = 'Confirmar Endereço';
+                    confirmAddressBtn.disabled = false;
+                    
                     checkoutStep = 'payment';
                     updateModalView();
                 }
             });
 
-            // Lógica dos botões de pagamento
             creditCardBtn.addEventListener('click', () => {
                 currentPaymentMethod = 'credit-card';
+                currentInstallments = parseInt(installmentsSelect.value);
                 creditCardBtn.classList.add('bg-purple-600');
                 pixBtn.classList.remove('bg-purple-600');
                 creditCardForm.classList.remove('hidden');
@@ -564,7 +697,7 @@
             });
 
             payWithCardBtn.addEventListener('click', (e) => {
-                e.preventDefault(); // Evita o envio do formulário
+                e.preventDefault();
                 handleCheckout();
             });
 
@@ -572,17 +705,14 @@
                 handleCheckout();
             });
             
-            // Lógica para fechar o modal de sucesso
             successModalCloseBtn.addEventListener('click', () => {
                 successModal.style.display = 'none';
             });
 
-            // Lógica de busca de endereço por CEP na API ViaCEP
             const addressCepInput = document.getElementById('address-cep');
             const addressStreetInput = document.getElementById('address-street');
 
             addressCepInput.addEventListener('input', (e) => {
-                // Formata o CEP como 00000-000
                 let value = e.target.value.replace(/\D/g, ''); 
                 let formattedValue = '';
                 if (value.length > 5) {
@@ -613,7 +743,6 @@
                 }
             });
 
-            // Renderiza o carrinho na carga inicial da página
             renderCart();
         });
     </script>
